@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Search, DollarSign, HelpCircle, Phone, Filter, Gift, Quote } from "lucide-react";
+import { ArrowRight, Search, DollarSign, HelpCircle, Phone, Filter, Gift, Quote, ChevronDown, Star, Users, Building2, Zap, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -10,38 +10,41 @@ import { useVendors } from "@/hooks/useVendors";
 import { useIndustries } from "@/hooks/useIndustries";
 import { useState } from "react";
 
-// Mock featured logos - in production these would come from a database
-const featuredLogos = [
-  { name: "Oracle NetSuite", logo: "ORACLE NETSUITE" },
-  { name: "Sage Intacct", logo: "sage Intacct" },
-  { name: "SAP Business One", logo: "SAP Business One" },
-  { name: "Infor CloudSuite", logo: "Infor CloudSuite" },
-  { name: "Odoo", logo: "odoo" },
-  { name: "Microsoft Dynamics 365", logo: "Microsoft Dynamics 365" },
-  { name: "Acumatica", logo: "Acumatica" },
-  { name: "SAP ByDesign", logo: "SAP ByDesign" },
+// Comparison preview data matching the PDF
+const comparisonData = [
+  { brand: "ORACLE", name: "NetSuite ERP", priceRange: "$10K - $100K", costPerUser: "$125/mo", deployment: ["Cloud", "On-Prem"], retention: "N/A" },
+  { brand: "SAP", name: "SAP S/4HANA", priceRange: "N/A", costPerUser: "$2,000/mo", deployment: ["Cloud", "On-Prem"], retention: "78%" },
+  { brand: "CETEC", name: "Cetec ERP", priceRange: "$3K - $40K", costPerUser: "$40/mo", deployment: ["Cloud", "On-Prem"], retention: "95%" },
+  { brand: "EPICOR", name: "Epicor Kinetic", priceRange: "$4K - $500K", costPerUser: "$125/mo", deployment: ["Cloud", "On-Prem"], retention: "87%" },
 ];
 
-// Testimonials data
+// Featured logos - matching PDF layout
+const featuredLogos = [
+  "Oracle NetSuite", "Sage Intacct", "SAP Business One", "Infor CloudSuite",
+  "Odoo", "Microsoft Dynamics 365", "Acumatica", "SAP ByDesign",
+  "Sage X3", "SAP S/4 HANA", "Oracle ERP Cloud", "SYSPRO"
+];
+
+// Testimonials matching PDF
 const testimonials = [
   {
-    quote: "ERP Rundown helped us find the right ERP solutions for our business. This enabled us to start our project on time, saving us months of shortlisting and vendor interviews.",
+    quote: "ERP Rundown helped us to find the right ERP solutions for our business. This enabled us to start our project on time, saving us months of shortlisting and vendor interviews and wasted internal expense.",
     name: "Jessica Stevens",
     role: "Finance Director",
   },
   {
-    quote: "We saved time and money by using ERP Rundown to short-list vendor options. They gave us free support on technical aspects of our requirements, reducing risk and saving time.",
+    quote: "We saved time and money by using ERP Rundown to short-list vendor options. They gave us free support on technical aspects of our requirements, reducing risk and further saving time.",
     name: "Michael Derlacki",
     role: "IT Manager",
   },
   {
-    quote: "Our ERP implementation was a massive success because of the expert team at ERP Rundown. I would recommend every organization evaluating ERP systems to start their journey here.",
+    quote: "Our ERP implementation was a massive success because of the expert team at ERP Rundown. I would recommend every organization evaluating ERP systems to start their journey with ERP Rundown.",
     name: "Gareth Edwards",
     role: "Vice President",
   },
 ];
 
-// Advisory board quotes
+// Advisory board quotes matching PDF
 const advisoryQuotes = [
   {
     quote: "The industry comparisons were crucial to our ERP selection process. Choosing the wrong manufacturing ERP system is easily avoided with ERP Rundown.",
@@ -57,12 +60,18 @@ const advisoryQuotes = [
   },
 ];
 
-// Trusted companies
+// Trusted companies matching PDF
 const trustedCompanies = ["BOBST", "UCC", "NUCOR", "Deloitte", "Boston Scientific", "BASF"];
 
-export default function Index() {
-  const [searchQuery, setSearchQuery] = useState("");
+// Stats for enhanced hero
+const stats = [
+  { value: "100+", label: "ERP Systems Reviewed" },
+  { value: "50K+", label: "Businesses Helped" },
+  { value: "15+", label: "Years Experience" },
+  { value: "98%", label: "Client Satisfaction" },
+];
 
+export default function Index() {
   const { data: featuredVendors, isLoading: vendorsLoading } = useVendors({
     featured: true,
     limit: 6,
@@ -73,75 +82,97 @@ export default function Index() {
     limit: 8,
   });
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      window.location.href = `/vendors?search=${encodeURIComponent(searchQuery.trim())}`;
-    }
-  };
-
   return (
     <PageLayout>
-      {/* Hero Section */}
-      <section className="bg-background py-16 md:py-24">
+      {/* Hero Section - Matching PDF Layout */}
+      <section className="bg-background py-12 md:py-20 lg:py-24">
         <div className="container-page">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
+          <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-12">
             {/* Left side - Text content */}
-            <div>
-              <h1 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-5xl">
+            <div className="max-w-xl">
+              <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-5xl">
                 The Top ERP Systems:
                 <br />
                 <span className="text-primary">Search, Compare, Select</span>
               </h1>
-              <p className="mt-6 text-lg text-muted-foreground">
+              <p className="mt-4 text-base text-muted-foreground sm:mt-6 sm:text-lg">
                 Our ERP decision platform compares the top ERP systems for manufacturing businesses of all sizes. Browse our curated comparison of top-tier ERP systems or tap into personalized recommendations from our experts.
               </p>
               
               {/* CTA Buttons */}
-              <div className="mt-8 flex flex-wrap gap-4">
+              <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:gap-4">
                 <Link to="/compare">
-                  <Button size="lg" className="bg-primary hover:bg-primary/90">
+                  <Button size="lg" className="w-full bg-primary hover:bg-primary/90 sm:w-auto">
                     Compare The Best ERP
                   </Button>
                 </Link>
                 <Link to="/contact">
-                  <Button size="lg" variant="outline">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto">
                     Get Recommendations
                   </Button>
                 </Link>
               </div>
+
+              {/* Stats row - Enhancement */}
+              <div className="mt-8 grid grid-cols-2 gap-4 border-t pt-8 sm:grid-cols-4">
+                {stats.map((stat, i) => (
+                  <div key={i} className="text-center sm:text-left">
+                    <div className="text-2xl font-bold text-primary">{stat.value}</div>
+                    <div className="text-xs text-muted-foreground">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Right side - Comparison preview card */}
-            <div className="rounded-xl border bg-card p-1 shadow-lg">
-              <div className="rounded-lg bg-muted/30 p-4">
-                {/* Browser dots */}
-                <div className="mb-4 flex gap-1.5">
+            {/* Right side - Comparison preview card matching PDF exactly */}
+            <div className="rounded-xl border bg-card shadow-xl">
+              {/* Browser chrome */}
+              <div className="flex items-center gap-2 border-b bg-muted/50 px-4 py-3">
+                <div className="flex gap-1.5">
                   <div className="h-3 w-3 rounded-full bg-red-400"></div>
                   <div className="h-3 w-3 rounded-full bg-yellow-400"></div>
                   <div className="h-3 w-3 rounded-full bg-green-400"></div>
                 </div>
-                
-                {/* Comparison table preview */}
-                <div className="grid grid-cols-4 gap-2 text-xs">
-                  {["NetSuite ERP", "SAP S/4HANA", "Cetec ERP", "Epicor Kinetic"].map((vendor, i) => (
-                    <div key={i} className="rounded-lg bg-background p-3 text-center">
-                      <div className="mb-2 text-[10px] font-medium text-primary uppercase tracking-wider">
-                        {["ORACLE", "SAP", "CETEC", "EPICOR"][i]}
+                <div className="ml-2 flex-1 rounded bg-background px-3 py-1 text-xs text-muted-foreground">
+                  erprundown.com/compare
+                </div>
+              </div>
+              
+              {/* Comparison table preview - Exact PDF layout */}
+              <div className="overflow-x-auto p-3 sm:p-4">
+                <div className="grid min-w-[500px] grid-cols-4 gap-2 sm:gap-3">
+                  {comparisonData.map((vendor, i) => (
+                    <div key={i} className="rounded-lg border bg-background p-2 sm:p-3">
+                      {/* Brand logo placeholder */}
+                      <div className="mb-2 flex h-8 items-center justify-center border-b pb-2">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-accent sm:text-xs">
+                          {vendor.brand}
+                        </span>
                       </div>
-                      <div className="font-semibold text-foreground text-[11px]">{vendor}</div>
-                      <div className="mt-3 space-y-1.5 text-[9px] text-muted-foreground">
+                      <div className="mb-3 text-center text-xs font-semibold text-foreground sm:text-sm">
+                        {vendor.name}
+                      </div>
+                      
+                      {/* Specs */}
+                      <div className="space-y-1.5 text-[9px] sm:text-[10px]">
                         <div className="flex justify-between">
-                          <span>PRICE RANGE</span>
-                          <span className="font-medium text-foreground">{["$10K-$100K", "N/A", "$3K-$40K", "$4K-$500K"][i]}</span>
+                          <span className="text-muted-foreground">PRICE RANGE</span>
+                          <span className="font-medium text-foreground">{vendor.priceRange}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>COST/USER</span>
-                          <span className="font-medium text-foreground">{["$125/mo", "$2,000/mo", "$40/mo", "$125/mo"][i]}</span>
+                          <span className="text-muted-foreground">COST PER USER</span>
+                          <span className="font-medium text-foreground">{vendor.costPerUser}</span>
                         </div>
-                        <div className="mt-2 flex justify-center gap-1">
-                          <span className="rounded bg-accent/10 px-1.5 py-0.5 text-accent">Cloud</span>
-                          <span className="rounded bg-muted px-1.5 py-0.5">On-Prem</span>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">DEPLOYMENTS</span>
+                        </div>
+                        <div className="flex justify-center gap-1">
+                          <span className="rounded bg-accent/20 px-1 py-0.5 text-[8px] text-accent sm:px-1.5 sm:text-[9px]">Cloud</span>
+                          <span className="rounded bg-muted px-1 py-0.5 text-[8px] text-muted-foreground sm:px-1.5 sm:text-[9px]">On-Prem</span>
+                        </div>
+                        <div className="flex justify-between pt-1">
+                          <span className="text-muted-foreground">RETENTION RATE</span>
+                          <span className="font-medium text-accent">{vendor.retention}</span>
                         </div>
                       </div>
                     </div>
@@ -153,83 +184,76 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Featured In / Logo Bar */}
-      <section className="border-y bg-muted/30 py-8">
+      {/* Featured In / Logo Bar - Matching PDF */}
+      <section className="border-y bg-muted/30 py-6 md:py-8">
         <div className="container-page">
-          <div className="grid grid-cols-4 gap-6 md:grid-cols-8">
+          <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12">
             {featuredLogos.map((item, i) => (
-              <div key={i} className="flex items-center justify-center">
-                <span className="text-xs font-semibold text-muted-foreground/70 md:text-sm">{item.logo}</span>
+              <div key={i} className="flex items-center justify-center p-2">
+                <span className="text-center text-[10px] font-semibold text-muted-foreground/60 sm:text-xs">{item}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Compare ERP Systems Filter Bar */}
-      <section className="section-padding">
+      {/* Compare ERP Systems Filter Bar - Matching PDF */}
+      <section className="py-8 md:py-12">
         <div className="container-page">
-          <p className="mb-4 text-sm font-medium uppercase tracking-wider text-muted-foreground">
+          <p className="mb-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">
             Compare The Best ERP Systems
           </p>
-          <div className="flex flex-wrap items-center gap-3 rounded-lg border bg-card p-4">
-            <div className="flex flex-1 flex-wrap items-center gap-3">
-              <div className="flex min-w-[140px] items-center gap-2 rounded-md border bg-background px-3 py-2">
-                <span className="text-sm text-muted-foreground">Industry</span>
-                <ArrowRight className="h-4 w-4 rotate-90 text-muted-foreground" />
-              </div>
-              <div className="flex min-w-[180px] items-center gap-2 rounded-md border bg-background px-3 py-2">
-                <span className="text-sm text-muted-foreground">Manufacturing Mode</span>
-                <ArrowRight className="h-4 w-4 rotate-90 text-muted-foreground" />
-              </div>
-              <div className="flex min-w-[140px] items-center gap-2 rounded-md border bg-background px-3 py-2">
-                <span className="text-sm text-muted-foreground">Company Size</span>
-                <ArrowRight className="h-4 w-4 rotate-90 text-muted-foreground" />
-              </div>
-              <div className="flex min-w-[120px] items-center gap-2 rounded-md border bg-background px-3 py-2">
-                <span className="text-sm text-muted-foreground">Technology</span>
-              </div>
-              <button className="flex h-9 w-9 items-center justify-center rounded-md border bg-background text-muted-foreground hover:bg-muted">
+          <div className="flex flex-col gap-3 rounded-lg border bg-card p-3 sm:flex-row sm:flex-wrap sm:items-center sm:p-4">
+            <div className="flex flex-1 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+              {["Industry", "Manufacturing Mode", "Company Size", "Technology"].map((filter, i) => (
+                <button key={i} className="flex min-w-[120px] items-center justify-between gap-2 rounded-md border bg-background px-3 py-2 text-left text-sm text-muted-foreground transition-colors hover:bg-muted sm:min-w-[140px]">
+                  <span>{filter}</span>
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+              ))}
+              <button className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border bg-background text-muted-foreground hover:bg-muted">
                 <Filter className="h-4 w-4" />
               </button>
             </div>
-            <Button className="bg-accent hover:bg-accent/90">
-              <Search className="mr-2 h-4 w-4" />
-              Search
-            </Button>
+            <Link to="/vendors">
+              <Button className="w-full bg-accent hover:bg-accent/90 sm:w-auto">
+                <Search className="mr-2 h-4 w-4" />
+                Search
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Dual CTA Section - Demo & Pricing / Expert Advice */}
-      <section className="section-padding bg-muted/30">
+      {/* Dual CTA Section - Demo & Pricing / Expert Advice - Matching PDF */}
+      <section className="bg-muted/30 py-8 md:py-12">
         <div className="container-page">
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
             {/* Get ERP Demos & Pricing */}
-            <div className="rounded-xl border bg-card p-8 text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
-                <DollarSign className="h-8 w-8 text-accent" />
+            <div className="rounded-xl border bg-card p-6 text-center sm:p-8">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-accent/10 sm:h-16 sm:w-16">
+                <DollarSign className="h-7 w-7 text-accent sm:h-8 sm:w-8" />
               </div>
-              <h3 className="text-xl font-bold text-foreground">ERP System Demos and Pricing</h3>
-              <p className="mt-3 text-muted-foreground">
+              <h3 className="text-lg font-bold text-foreground sm:text-xl">ERP System Demos and Pricing</h3>
+              <p className="mt-2 text-sm text-muted-foreground sm:mt-3 sm:text-base">
                 Get custom price quotes and demos from the top 10 ERP vendors in one simple step.
               </p>
-              <Link to="/contact" className="mt-4 inline-flex items-center font-medium text-accent hover:underline">
+              <Link to="/contact" className="mt-4 inline-flex items-center text-sm font-medium text-accent hover:underline sm:text-base">
                 Get ERP Demos & Pricing
                 <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </div>
 
             {/* Expert ERP Selection Advice */}
-            <div className="rounded-xl border bg-card p-8 text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
-                <HelpCircle className="h-8 w-8 text-accent" />
+            <div className="rounded-xl border bg-card p-6 text-center sm:p-8">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-accent/10 sm:h-16 sm:w-16">
+                <HelpCircle className="h-7 w-7 text-accent sm:h-8 sm:w-8" />
               </div>
-              <h3 className="text-xl font-bold text-foreground">Expert ERP Selection Advice</h3>
-              <p className="mt-3 text-muted-foreground">
+              <h3 className="text-lg font-bold text-foreground sm:text-xl">Expert ERP Selection Advice</h3>
+              <p className="mt-2 text-sm text-muted-foreground sm:mt-3 sm:text-base">
                 Have Questions? Our ERP experts can help you find the top ERP solution for your needs and budget.
               </p>
-              <Link to="/contact" className="mt-4 inline-flex items-center font-medium text-accent hover:underline">
+              <Link to="/contact" className="mt-4 inline-flex items-center text-sm font-medium text-accent hover:underline sm:text-base">
                 Get ERP Recommendations
                 <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
@@ -238,54 +262,60 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Top ERP Vendors Section */}
-      <section className="section-padding">
+      {/* Top ERP Vendors Section - Matching PDF */}
+      <section className="py-8 md:py-12 lg:py-16">
         <div className="container-page">
-          <div className="mb-8 flex items-end justify-between">
-            <div>
-              <span className="mb-2 inline-block text-sm font-medium uppercase tracking-wider text-muted-foreground">
+          <div className="mb-6 flex flex-col gap-4 sm:mb-8 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              <span className="mb-2 inline-block text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 Decision Platform Featuring
               </span>
-              <h2 className="text-2xl font-bold text-foreground md:text-3xl">
+              <h2 className="text-xl font-bold text-foreground sm:text-2xl md:text-3xl">
                 The Best ERP Systems and Vendors
               </h2>
-              <p className="mt-2 max-w-2xl text-muted-foreground">
+              <p className="mt-2 text-sm text-muted-foreground sm:text-base">
                 The ERP Rundown decision platform specializes in indexing and comparing the top ERP systems for manufacturing. We focus on showcasing the highest-rated ERP software systems from trusted and proven vendors.
               </p>
               <Link to="/compare" className="mt-3 inline-block text-sm font-medium text-accent hover:underline">
-                Compare the top 10 ERP systems side-by-side
+                Compare the top 10 ERP systems side-by-side →
               </Link>
             </div>
+            <Link to="/vendors" className="shrink-0">
+              <Button variant="outline">
+                View All Vendors
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
           </div>
 
           {vendorsLoading ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="h-64 animate-pulse rounded-lg bg-muted" />
               ))}
             </div>
           ) : featuredVendors && featuredVendors.length > 0 ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
               {featuredVendors.map((vendor) => (
                 <VendorCard key={vendor.id} vendor={vendor} />
               ))}
             </div>
           ) : (
-            <div className="rounded-lg border border-dashed p-12 text-center">
+            <div className="rounded-lg border border-dashed p-8 text-center sm:p-12">
               <p className="text-muted-foreground">No featured vendors yet.</p>
             </div>
           )}
         </div>
       </section>
 
-      {/* Ready to Find CTA Banner */}
-      <section className="bg-primary py-8">
-        <div className="container-page flex flex-col items-center justify-between gap-4 md:flex-row">
-          <div className="text-center md:text-left">
-            <h2 className="text-2xl font-bold text-white md:text-3xl">
+      {/* Ready to Find CTA Banner - Matching PDF */}
+      <section className="bg-primary py-6 sm:py-8">
+        <div className="container-page flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
+          <div>
+            <h2 className="text-xl font-bold text-white sm:text-2xl md:text-3xl">
               Ready to Find a Top ERP System?
             </h2>
-            <p className="mt-1 text-white/80">
+            <p className="mt-1 text-sm text-white/80 sm:text-base">
               Our "Best Fit" comparison tool finds the top ERP Systems for your business
             </p>
           </div>
@@ -297,59 +327,59 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Industries Section */}
-      <section className="section-padding">
+      {/* Industries Section - Matching PDF */}
+      <section className="py-8 md:py-12 lg:py-16">
         <div className="container-page">
-          <div className="mb-8 text-center">
-            <h2 className="text-2xl font-bold text-foreground md:text-3xl">
+          <div className="mb-6 text-center sm:mb-8">
+            <h2 className="text-xl font-bold text-foreground sm:text-2xl md:text-3xl">
               Industries
             </h2>
-            <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+            <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground sm:text-base">
               Find the perfect ERP solution tailored to your specific industry needs
             </p>
           </div>
 
           {industriesLoading ? (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="h-32 animate-pulse rounded-lg bg-muted" />
+                <div key={i} className="h-28 animate-pulse rounded-lg bg-muted sm:h-32" />
               ))}
             </div>
           ) : featuredIndustries && featuredIndustries.length > 0 ? (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
               {featuredIndustries.map((industry) => (
                 <IndustryCard key={industry.id} industry={industry} />
               ))}
             </div>
           ) : (
-            <div className="rounded-lg border border-dashed p-12 text-center">
+            <div className="rounded-lg border border-dashed p-8 text-center sm:p-12">
               <p className="text-muted-foreground">No industries yet.</p>
             </div>
           )}
         </div>
       </section>
 
-      {/* User Feedback / Testimonials Section */}
-      <section className="section-padding bg-muted/30">
+      {/* User Feedback / Testimonials Section - Matching PDF */}
+      <section className="bg-muted/30 py-8 md:py-12 lg:py-16">
         <div className="container-page">
-          <h2 className="mb-8 text-2xl font-bold text-foreground md:text-3xl">
+          <h2 className="mb-6 text-xl font-bold text-foreground sm:mb-8 sm:text-2xl md:text-3xl">
             Our User Feedback
           </h2>
           
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
             {testimonials.map((testimonial, i) => (
-              <div key={i} className="rounded-xl border bg-card p-6">
-                <Quote className="mb-4 h-8 w-8 text-accent/30" />
-                <p className="text-muted-foreground">"{testimonial.quote}"</p>
-                <div className="mt-6 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-                    <span className="text-sm font-medium text-muted-foreground">
+              <div key={i} className="rounded-xl border bg-card p-5 sm:p-6">
+                <div className="mb-3 text-3xl font-serif text-accent/40 sm:mb-4 sm:text-4xl">"</div>
+                <p className="text-sm text-muted-foreground sm:text-base">{testimonial.quote}</p>
+                <div className="mt-5 flex items-center gap-3 sm:mt-6">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted sm:h-12 sm:w-12">
+                    <span className="text-sm font-medium text-muted-foreground sm:text-base">
                       {testimonial.name.charAt(0)}
                     </span>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-accent">{testimonial.role}</p>
-                    <p className="font-semibold text-foreground">{testimonial.name}</p>
+                    <p className="text-xs font-medium text-accent sm:text-sm">{testimonial.role}</p>
+                    <p className="text-sm font-semibold text-foreground sm:text-base">{testimonial.name}</p>
                   </div>
                 </div>
               </div>
@@ -358,33 +388,33 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Advisory Board / Trusted By Section */}
-      <section className="section-padding">
+      {/* Advisory Board / Trusted By Section - Matching PDF */}
+      <section className="py-8 md:py-12 lg:py-16">
         <div className="container-page">
-          <div className="mb-8 text-center">
-            <span className="mb-2 inline-block rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent">
+          <div className="mb-6 text-center sm:mb-8">
+            <span className="mb-2 inline-block rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent sm:px-4 sm:text-sm">
               Trusted ERP Advisor To
             </span>
-            <h2 className="mt-4 text-2xl font-bold text-foreground md:text-3xl">
+            <h2 className="mt-3 text-xl font-bold text-foreground sm:mt-4 sm:text-2xl md:text-3xl">
               Manufacturing Companies of All Sizes
             </h2>
           </div>
 
           {/* Company logos */}
-          <div className="mb-12 flex flex-wrap items-center justify-center gap-8 md:gap-12">
+          <div className="mb-8 flex flex-wrap items-center justify-center gap-4 sm:mb-12 sm:gap-8 md:gap-12">
             {trustedCompanies.map((company, i) => (
-              <span key={i} className="text-lg font-bold text-muted-foreground/60 md:text-xl">
+              <span key={i} className="text-base font-bold text-muted-foreground/50 sm:text-lg md:text-xl">
                 {company}
               </span>
             ))}
           </div>
 
           {/* Advisory quotes */}
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
             {advisoryQuotes.map((item, i) => (
-              <div key={i} className="border-l-4 border-accent/30 pl-4">
-                <p className="text-muted-foreground">"{item.quote}"</p>
-                <p className="mt-3 font-semibold uppercase tracking-wider text-foreground">
+              <div key={i} className="border-l-4 border-accent/30 bg-muted/30 p-4 sm:pl-6">
+                <p className="text-sm text-muted-foreground sm:text-base">{item.quote}</p>
+                <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-foreground sm:text-sm">
                   {item.name}
                 </p>
               </div>
@@ -393,26 +423,26 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Start Your ERP Journey - 3 Steps */}
-      <section className="section-padding bg-muted/30">
+      {/* Start Your ERP Journey - 3 Steps - Matching PDF */}
+      <section className="bg-muted/30 py-8 md:py-12 lg:py-16">
         <div className="container-page">
-          <div className="mb-12 text-center">
-            <h2 className="text-2xl font-bold text-foreground md:text-3xl">
+          <div className="mb-8 text-center sm:mb-12">
+            <h2 className="text-xl font-bold text-foreground sm:text-2xl md:text-3xl">
               Start your ERP journey with 3 simple steps:
             </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
               Our experts can <span className="font-semibold text-foreground">save you time and money</span>, plus decrease ERP project risk with our simple, hassle-free 3 step plan.
             </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
             {/* Step 1 */}
             <div className="text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border-2 border-accent bg-accent/10">
-                <Phone className="h-6 w-6 text-accent" />
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border-2 border-accent bg-accent/10 sm:h-14 sm:w-14">
+                <Phone className="h-5 w-5 text-accent sm:h-6 sm:w-6" />
               </div>
-              <h3 className="text-lg font-bold text-foreground">Get In Touch</h3>
-              <p className="mt-2 text-muted-foreground">
+              <h3 className="text-base font-bold text-foreground sm:text-lg">Get In Touch</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
                 Contact us and our team will reach out to schedule a 15-minute call to learn more about your needs.
               </p>
               <Link to="/contact" className="mt-4 inline-flex items-center text-sm font-medium text-accent hover:underline">
@@ -423,11 +453,11 @@ export default function Index() {
 
             {/* Step 2 */}
             <div className="text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border-2 border-accent bg-accent/10">
-                <Filter className="h-6 w-6 text-accent" />
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border-2 border-accent bg-accent/10 sm:h-14 sm:w-14">
+                <Filter className="h-5 w-5 text-accent sm:h-6 sm:w-6" />
               </div>
-              <h3 className="text-lg font-bold text-foreground">Discovery</h3>
-              <p className="mt-2 text-muted-foreground">
+              <h3 className="text-base font-bold text-foreground sm:text-lg">Discovery</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
                 Our team will analyse over 100 ERP solutions to recommend an evaluation shortlist.
               </p>
               <Link to="/contact" className="mt-4 inline-flex items-center text-sm font-medium text-accent hover:underline">
@@ -438,11 +468,11 @@ export default function Index() {
 
             {/* Step 3 */}
             <div className="text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border-2 border-accent bg-accent/10">
-                <Gift className="h-6 w-6 text-accent" />
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border-2 border-accent bg-accent/10 sm:h-14 sm:w-14">
+                <Gift className="h-5 w-5 text-accent sm:h-6 sm:w-6" />
               </div>
-              <h3 className="text-lg font-bold text-foreground">Free Advice & Resources</h3>
-              <p className="mt-2 text-muted-foreground">
+              <h3 className="text-base font-bold text-foreground sm:text-lg">Free Advice & Resources</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
                 We provide every user with a free resource pack and complimentary advice to ensure success.
               </p>
               <Link to="/contact" className="mt-4 inline-flex items-center text-sm font-medium text-accent hover:underline">
@@ -450,6 +480,30 @@ export default function Index() {
                 <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA - Enhancement over PDF */}
+      <section className="bg-primary py-10 sm:py-12 md:py-16">
+        <div className="container-page text-center">
+          <h2 className="text-2xl font-bold text-white sm:text-3xl md:text-4xl">
+            Ready to Transform Your Business?
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-sm text-white/80 sm:text-base">
+            Join thousands of manufacturing companies who found their perfect ERP match through ERP Rundown.
+          </p>
+          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:mt-8 sm:flex-row sm:gap-4">
+            <Link to="/compare">
+              <Button size="lg" variant="secondary" className="w-full sm:w-auto">
+                Compare ERP Systems
+              </Button>
+            </Link>
+            <Link to="/contact">
+              <Button size="lg" variant="outline" className="w-full border-white/30 text-white hover:bg-white/10 sm:w-auto">
+                Get Free Consultation
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
