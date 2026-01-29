@@ -15,11 +15,7 @@ export function useVendors(options?: {
     queryFn: async () => {
       let query = supabase
         .from("vendors")
-        .select(`
-          *,
-          vendor_industries!inner(industry_id),
-          vendor_features(feature_id)
-        `)
+        .select("*")
         .order("featured", { ascending: false })
         .order("name", { ascending: true });
 
