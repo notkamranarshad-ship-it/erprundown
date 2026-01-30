@@ -37,7 +37,9 @@ export default function VendorsPage() {
 
   const searchQuery = searchParams.get("search") || "";
   const selectedDeployment = searchParams.getAll("deployment");
-  const selectedSize = searchParams.getAll("size");
+  // Support both single "size" param and multiple "size[]" params
+  const sizeParam = searchParams.get("size");
+  const selectedSize = sizeParam ? [sizeParam] : searchParams.getAll("size");
   const selectedIndustry = searchParams.get("industry") || "";
   const sortBy = searchParams.get("sort") || "featured";
 

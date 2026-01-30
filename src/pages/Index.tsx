@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
-import { ArrowRight, Search, DollarSign, HelpCircle, Phone, Filter, Gift, Quote, ChevronDown, Star, Users, Building2, Zap, CheckCircle2 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, Search, DollarSign, HelpCircle, Phone, Filter, Gift, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { VendorCard } from "@/components/vendors/VendorCard";
 import { IndustryCard } from "@/components/industries/IndustryCard";
@@ -9,20 +8,61 @@ import { CompareFloatingBar } from "@/components/compare/CompareFloatingBar";
 import { useVendors } from "@/hooks/useVendors";
 import { useIndustries } from "@/hooks/useIndustries";
 import { useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // Comparison preview data matching the PDF
 const comparisonData = [
-  { brand: "ORACLE", name: "NetSuite ERP", priceRange: "$10K - $100K", costPerUser: "$125/mo", deployment: ["Cloud", "On-Prem"], retention: "N/A" },
-  { brand: "SAP", name: "SAP S/4HANA", priceRange: "N/A", costPerUser: "$2,000/mo", deployment: ["Cloud", "On-Prem"], retention: "78%" },
-  { brand: "CETEC", name: "Cetec ERP", priceRange: "$3K - $40K", costPerUser: "$40/mo", deployment: ["Cloud", "On-Prem"], retention: "95%" },
-  { brand: "EPICOR", name: "Epicor Kinetic", priceRange: "$4K - $500K", costPerUser: "$125/mo", deployment: ["Cloud", "On-Prem"], retention: "87%" },
+  { 
+    brand: "ORACLE", 
+    name: "NetSuite ERP", 
+    priceRange: "$10K - $100K", 
+    costPerUser: "$125/mo", 
+    deployment: ["Cloud", "On-Prem"], 
+    retention: "N/A",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/3/36/Logo.min.svg"
+  },
+  { 
+    brand: "SAP", 
+    name: "SAP S/4HANA", 
+    priceRange: "N/A", 
+    costPerUser: "$2,000/mo", 
+    deployment: ["Cloud", "On-Prem"], 
+    retention: "78%",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg"
+  },
+  { 
+    brand: "CETEC", 
+    name: "Cetec ERP", 
+    priceRange: "$3K - $40K", 
+    costPerUser: "$40/mo", 
+    deployment: ["Cloud", "On-Prem"], 
+    retention: "95%",
+    logo: null
+  },
+  { 
+    brand: "EPICOR", 
+    name: "Epicor Kinetic", 
+    priceRange: "$4K - $500K", 
+    costPerUser: "$125/mo", 
+    deployment: ["Cloud", "On-Prem"], 
+    retention: "87%",
+    logo: "https://www.epicor.com/globalassets/epicor-logo-2021.svg"
+  },
 ];
 
-// Featured logos - matching PDF layout
+// Featured vendor logos with real URLs
 const featuredLogos = [
-  "Oracle NetSuite", "Sage Intacct", "SAP Business One", "Infor CloudSuite",
-  "Odoo", "Microsoft Dynamics 365", "Acumatica", "SAP ByDesign",
-  "Sage X3", "SAP S/4 HANA", "Oracle ERP Cloud", "SYSPRO"
+  { name: "Oracle NetSuite", logo: "https://upload.wikimedia.org/wikipedia/commons/3/36/Logo.min.svg" },
+  { name: "SAP", logo: "https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg" },
+  { name: "Microsoft", logo: "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" },
+  { name: "Infor", logo: "https://cdn.worldvectorlogo.com/logos/infor.svg" },
+  { name: "Sage", logo: "https://upload.wikimedia.org/wikipedia/commons/2/29/Sage_logo.svg" },
+  { name: "Acumatica", logo: "https://www.acumatica.com/wp-content/uploads/2021/09/acumatica-logo.svg" },
 ];
 
 // Testimonials matching PDF
@@ -60,8 +100,12 @@ const advisoryQuotes = [
   },
 ];
 
-// Trusted companies matching PDF
-const trustedCompanies = ["BOBST", "UCC", "NUCOR", "Deloitte", "Boston Scientific", "BASF"];
+// Trusted companies with real logos
+const trustedCompanies = [
+  { name: "BOBST", logo: "https://upload.wikimedia.org/wikipedia/commons/6/6e/BOBST_logo.svg" },
+  { name: "Deloitte", logo: "https://upload.wikimedia.org/wikipedia/commons/5/56/Deloitte.svg" },
+  { name: "BASF", logo: "https://upload.wikimedia.org/wikipedia/commons/d/d6/BASF-Logo_bw.svg" },
+];
 
 // Stats for enhanced hero
 const stats = [
@@ -71,16 +115,41 @@ const stats = [
   { value: "98%", label: "Client Satisfaction" },
 ];
 
+// Filter options
+const companySizeOptions = ["Small", "Mid-market", "Enterprise"];
+const deploymentOptions = ["SaaS", "On-Prem", "Hybrid"];
+
 export default function Index() {
+  const navigate = useNavigate();
+  const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedDeployment, setSelectedDeployment] = useState<string | null>(null);
+
   const { data: featuredVendors, isLoading: vendorsLoading } = useVendors({
     featured: true,
     limit: 6,
   });
 
+  const { data: allIndustries } = useIndustries({});
+
   const { data: featuredIndustries, isLoading: industriesLoading } = useIndustries({
     featured: true,
     limit: 8,
   });
+
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    if (selectedIndustry) params.set("industry", selectedIndustry);
+    if (selectedSize) params.set("size", selectedSize);
+    if (selectedDeployment) params.set("deployment", selectedDeployment);
+    navigate(`/vendors?${params.toString()}`);
+  };
+
+  const clearFilters = () => {
+    setSelectedIndustry(null);
+    setSelectedSize(null);
+    setSelectedDeployment(null);
+  };
 
   return (
     <PageLayout>
@@ -143,9 +212,20 @@ export default function Index() {
                 <div className="grid min-w-[500px] grid-cols-4 gap-2 sm:gap-3">
                   {comparisonData.map((vendor, i) => (
                     <div key={i} className="rounded-lg border bg-background p-2 sm:p-3">
-                      {/* Brand logo placeholder */}
+                      {/* Brand logo */}
                       <div className="mb-2 flex h-8 items-center justify-center border-b pb-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-accent sm:text-xs">
+                        {vendor.logo ? (
+                          <img 
+                            src={vendor.logo} 
+                            alt={vendor.brand} 
+                            className="h-5 w-auto max-w-[60px] object-contain sm:h-6"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                            }}
+                          />
+                        ) : null}
+                        <span className={`text-[10px] font-bold uppercase tracking-wider text-accent sm:text-xs ${vendor.logo ? 'hidden' : ''}`}>
                           {vendor.brand}
                         </span>
                       </div>
@@ -187,17 +267,27 @@ export default function Index() {
       {/* Featured In / Logo Bar - Matching PDF */}
       <section className="border-y bg-muted/30 py-6 md:py-8">
         <div className="container-page">
-          <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12">
+          <p className="mb-4 text-center text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            Featured ERP Partners
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:gap-12">
             {featuredLogos.map((item, i) => (
-              <div key={i} className="flex items-center justify-center p-2">
-                <span className="text-center text-[10px] font-semibold text-muted-foreground/60 sm:text-xs">{item}</span>
+              <div key={i} className="flex items-center justify-center grayscale opacity-60 transition-all hover:grayscale-0 hover:opacity-100">
+                <img 
+                  src={item.logo} 
+                  alt={item.name} 
+                  className="h-6 w-auto max-w-[80px] object-contain sm:h-8 sm:max-w-[100px]"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Compare ERP Systems Filter Bar - Matching PDF */}
+      {/* Compare ERP Systems Filter Bar - Functional */}
       <section className="py-8 md:py-12">
         <div className="container-page">
           <p className="mb-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">
@@ -205,22 +295,98 @@ export default function Index() {
           </p>
           <div className="flex flex-col gap-3 rounded-lg border bg-card p-3 sm:flex-row sm:flex-wrap sm:items-center sm:p-4">
             <div className="flex flex-1 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
-              {["Industry", "Manufacturing Mode", "Company Size", "Technology"].map((filter, i) => (
-                <button key={i} className="flex min-w-[120px] items-center justify-between gap-2 rounded-md border bg-background px-3 py-2 text-left text-sm text-muted-foreground transition-colors hover:bg-muted sm:min-w-[140px]">
-                  <span>{filter}</span>
-                  <ChevronDown className="h-4 w-4" />
+              {/* Industry Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex min-w-[140px] items-center justify-between gap-2 rounded-md border bg-background px-3 py-2 text-left text-sm transition-colors hover:bg-muted sm:min-w-[160px]">
+                    <span className={selectedIndustry ? "text-foreground" : "text-muted-foreground"}>
+                      {selectedIndustry || "Industry"}
+                    </span>
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-[200px] bg-background" align="start">
+                  <DropdownMenuItem onClick={() => setSelectedIndustry(null)}>
+                    All Industries
+                  </DropdownMenuItem>
+                  {allIndustries?.map((industry) => (
+                    <DropdownMenuItem 
+                      key={industry.id} 
+                      onClick={() => setSelectedIndustry(industry.slug)}
+                      className={selectedIndustry === industry.slug ? "bg-accent/10" : ""}
+                    >
+                      {industry.name}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Company Size Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex min-w-[140px] items-center justify-between gap-2 rounded-md border bg-background px-3 py-2 text-left text-sm transition-colors hover:bg-muted sm:min-w-[160px]">
+                    <span className={selectedSize ? "text-foreground" : "text-muted-foreground"}>
+                      {selectedSize || "Company Size"}
+                    </span>
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-[180px] bg-background" align="start">
+                  <DropdownMenuItem onClick={() => setSelectedSize(null)}>
+                    All Sizes
+                  </DropdownMenuItem>
+                  {companySizeOptions.map((size) => (
+                    <DropdownMenuItem 
+                      key={size} 
+                      onClick={() => setSelectedSize(size)}
+                      className={selectedSize === size ? "bg-accent/10" : ""}
+                    >
+                      {size}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Deployment Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex min-w-[140px] items-center justify-between gap-2 rounded-md border bg-background px-3 py-2 text-left text-sm transition-colors hover:bg-muted sm:min-w-[160px]">
+                    <span className={selectedDeployment ? "text-foreground" : "text-muted-foreground"}>
+                      {selectedDeployment || "Deployment"}
+                    </span>
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-[160px] bg-background" align="start">
+                  <DropdownMenuItem onClick={() => setSelectedDeployment(null)}>
+                    All Types
+                  </DropdownMenuItem>
+                  {deploymentOptions.map((type) => (
+                    <DropdownMenuItem 
+                      key={type} 
+                      onClick={() => setSelectedDeployment(type)}
+                      className={selectedDeployment === type ? "bg-accent/10" : ""}
+                    >
+                      {type}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Clear filters button */}
+              {(selectedIndustry || selectedSize || selectedDeployment) && (
+                <button 
+                  onClick={clearFilters}
+                  className="flex h-10 items-center justify-center rounded-md border bg-background px-3 text-sm text-muted-foreground hover:bg-muted"
+                >
+                  Clear
                 </button>
-              ))}
-              <button className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border bg-background text-muted-foreground hover:bg-muted">
-                <Filter className="h-4 w-4" />
-              </button>
+              )}
             </div>
-            <Link to="/vendors">
-              <Button className="w-full bg-accent hover:bg-accent/90 sm:w-auto">
-                <Search className="mr-2 h-4 w-4" />
-                Search
-              </Button>
-            </Link>
+            <Button onClick={handleSearch} className="w-full bg-accent hover:bg-accent/90 sm:w-auto">
+              <Search className="mr-2 h-4 w-4" />
+              Search
+            </Button>
           </div>
         </div>
       </section>
@@ -401,11 +567,19 @@ export default function Index() {
           </div>
 
           {/* Company logos */}
-          <div className="mb-8 flex flex-wrap items-center justify-center gap-4 sm:mb-12 sm:gap-8 md:gap-12">
+          <div className="mb-8 flex flex-wrap items-center justify-center gap-6 sm:mb-12 sm:gap-10 md:gap-14">
             {trustedCompanies.map((company, i) => (
-              <span key={i} className="text-base font-bold text-muted-foreground/50 sm:text-lg md:text-xl">
-                {company}
-              </span>
+              <div key={i} className="flex flex-col items-center gap-2 grayscale opacity-60 transition-all hover:grayscale-0 hover:opacity-100">
+                <img 
+                  src={company.logo} 
+                  alt={company.name} 
+                  className="h-8 w-auto max-w-[100px] object-contain sm:h-10"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+                <span className="text-xs font-medium text-muted-foreground">{company.name}</span>
+              </div>
             ))}
           </div>
 
