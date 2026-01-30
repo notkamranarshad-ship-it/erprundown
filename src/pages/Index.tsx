@@ -1,57 +1,77 @@
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight, Search, DollarSign, HelpCircle, Phone, Filter, Gift, ChevronDown } from "lucide-react";
+import { ArrowRight, Search, DollarSign, HelpCircle, Phone, Filter, Gift, ChevronDown, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { VendorCard } from "@/components/vendors/VendorCard";
 import { IndustryCard } from "@/components/industries/IndustryCard";
 import { CompareFloatingBar } from "@/components/compare/CompareFloatingBar";
+import { VendorSearchAutocomplete } from "@/components/home/VendorSearchAutocomplete";
+import { ComparisonPreviewCard } from "@/components/home/ComparisonPreviewCard";
+import { HeroComparePreview } from "@/components/home/HeroComparePreview";
 import { useVendors } from "@/hooks/useVendors";
 import { useIndustries } from "@/hooks/useIndustries";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
-// Comparison preview data matching the PDF
+// Comparison preview data matching the PDF with enhanced data
 const comparisonData = [
   { 
     brand: "ORACLE", 
     name: "NetSuite ERP", 
+    slug: "oracle-netsuite",
     priceRange: "$10K - $100K", 
     costPerUser: "$125/mo", 
     deployment: ["Cloud", "On-Prem"], 
     retention: "N/A",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/3/36/Logo.min.svg"
+    logo: "https://upload.wikimedia.org/wikipedia/commons/3/36/Logo.min.svg",
+    description: "Cloud-based ERP suite for growing businesses with strong financials and inventory management.",
+    pros: ["Unified cloud platform", "Strong financials", "Scalable for growth"],
+    implementation: "3-6 months"
   },
   { 
     brand: "SAP", 
     name: "SAP S/4HANA", 
+    slug: "sap-s4hana",
     priceRange: "N/A", 
     costPerUser: "$2,000/mo", 
     deployment: ["Cloud", "On-Prem"], 
     retention: "78%",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg"
+    logo: "https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg",
+    description: "Next-generation ERP with AI-powered insights for large enterprises.",
+    pros: ["Advanced analytics", "Global scalability", "Industry solutions"],
+    implementation: "12+ months"
   },
   { 
     brand: "CETEC", 
     name: "Cetec ERP", 
+    slug: "cetec-erp",
     priceRange: "$3K - $40K", 
     costPerUser: "$40/mo", 
     deployment: ["Cloud", "On-Prem"], 
     retention: "95%",
-    logo: null
+    logo: null,
+    description: "Affordable cloud ERP designed specifically for small manufacturers.",
+    pros: ["Low cost entry", "Quick implementation", "Manufacturing focus"],
+    implementation: "<3 months"
   },
   { 
     brand: "EPICOR", 
     name: "Epicor Kinetic", 
+    slug: "epicor-kinetic",
     priceRange: "$4K - $500K", 
     costPerUser: "$125/mo", 
     deployment: ["Cloud", "On-Prem"], 
     retention: "87%",
-    logo: "https://www.epicor.com/globalassets/epicor-logo-2021.svg"
+    logo: "https://www.epicor.com/globalassets/epicor-logo-2021.svg",
+    description: "Industry-specific ERP built for manufacturing and distribution.",
+    pros: ["Manufacturing expertise", "Flexible deployment", "Strong support"],
+    implementation: "6-12 months"
   },
 ];
 
@@ -124,6 +144,7 @@ export default function Index() {
   const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedDeployment, setSelectedDeployment] = useState<string | null>(null);
+  const [filtersChanged, setFiltersChanged] = useState(false);
 
   const { data: featuredVendors, isLoading: vendorsLoading } = useVendors({
     featured: true,
@@ -136,6 +157,15 @@ export default function Index() {
     featured: true,
     limit: 8,
   });
+
+  // Animate filter changes
+  useEffect(() => {
+    if (selectedIndustry || selectedSize || selectedDeployment) {
+      setFiltersChanged(true);
+      const timer = setTimeout(() => setFiltersChanged(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedIndustry, selectedSize, selectedDeployment]);
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -150,6 +180,8 @@ export default function Index() {
     setSelectedSize(null);
     setSelectedDeployment(null);
   };
+
+  const activeFiltersCount = [selectedIndustry, selectedSize, selectedDeployment].filter(Boolean).length;
 
   return (
     <PageLayout>
@@ -168,8 +200,13 @@ export default function Index() {
                 Our ERP decision platform compares the top ERP systems for manufacturing businesses of all sizes. Browse our curated comparison of top-tier ERP systems or tap into personalized recommendations from our experts.
               </p>
               
+              {/* Search Autocomplete */}
+              <div className="mt-6 sm:mt-8">
+                <VendorSearchAutocomplete />
+              </div>
+              
               {/* CTA Buttons */}
-              <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:gap-4">
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:gap-4">
                 <Link to="/compare">
                   <Button size="lg" className="w-full bg-primary hover:bg-primary/90 sm:w-auto">
                     Compare The Best ERP
@@ -180,6 +217,11 @@ export default function Index() {
                     Get Recommendations
                   </Button>
                 </Link>
+              </div>
+
+              {/* Compare Preview - shows when vendors are selected */}
+              <div className="mt-6">
+                <HeroComparePreview />
               </div>
 
               {/* Stats row - Enhancement */}
@@ -193,73 +235,8 @@ export default function Index() {
               </div>
             </div>
 
-            {/* Right side - Comparison preview card matching PDF exactly */}
-            <div className="rounded-xl border bg-card shadow-xl">
-              {/* Browser chrome */}
-              <div className="flex items-center gap-2 border-b bg-muted/50 px-4 py-3">
-                <div className="flex gap-1.5">
-                  <div className="h-3 w-3 rounded-full bg-red-400"></div>
-                  <div className="h-3 w-3 rounded-full bg-yellow-400"></div>
-                  <div className="h-3 w-3 rounded-full bg-green-400"></div>
-                </div>
-                <div className="ml-2 flex-1 rounded bg-background px-3 py-1 text-xs text-muted-foreground">
-                  erprundown.com/compare
-                </div>
-              </div>
-              
-              {/* Comparison table preview - Exact PDF layout */}
-              <div className="overflow-x-auto p-3 sm:p-4">
-                <div className="grid min-w-[500px] grid-cols-4 gap-2 sm:gap-3">
-                  {comparisonData.map((vendor, i) => (
-                    <div key={i} className="rounded-lg border bg-background p-2 sm:p-3">
-                      {/* Brand logo */}
-                      <div className="mb-2 flex h-8 items-center justify-center border-b pb-2">
-                        {vendor.logo ? (
-                          <img 
-                            src={vendor.logo} 
-                            alt={vendor.brand} 
-                            className="h-5 w-auto max-w-[60px] object-contain sm:h-6"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                              e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                            }}
-                          />
-                        ) : null}
-                        <span className={`text-[10px] font-bold uppercase tracking-wider text-accent sm:text-xs ${vendor.logo ? 'hidden' : ''}`}>
-                          {vendor.brand}
-                        </span>
-                      </div>
-                      <div className="mb-3 text-center text-xs font-semibold text-foreground sm:text-sm">
-                        {vendor.name}
-                      </div>
-                      
-                      {/* Specs */}
-                      <div className="space-y-1.5 text-[9px] sm:text-[10px]">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">PRICE RANGE</span>
-                          <span className="font-medium text-foreground">{vendor.priceRange}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">COST PER USER</span>
-                          <span className="font-medium text-foreground">{vendor.costPerUser}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">DEPLOYMENTS</span>
-                        </div>
-                        <div className="flex justify-center gap-1">
-                          <span className="rounded bg-accent/20 px-1 py-0.5 text-[8px] text-accent sm:px-1.5 sm:text-[9px]">Cloud</span>
-                          <span className="rounded bg-muted px-1 py-0.5 text-[8px] text-muted-foreground sm:px-1.5 sm:text-[9px]">On-Prem</span>
-                        </div>
-                        <div className="flex justify-between pt-1">
-                          <span className="text-muted-foreground">RETENTION RATE</span>
-                          <span className="font-medium text-accent">{vendor.retention}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            {/* Right side - Comparison preview card with hover effects */}
+            <ComparisonPreviewCard vendors={comparisonData} />
           </div>
         </div>
       </section>
@@ -287,33 +264,63 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Compare ERP Systems Filter Bar - Functional */}
+      {/* Compare ERP Systems Filter Bar - Functional with animations */}
       <section className="py-8 md:py-12">
         <div className="container-page">
-          <p className="mb-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            Compare The Best ERP Systems
-          </p>
-          <div className="flex flex-col gap-3 rounded-lg border bg-card p-3 sm:flex-row sm:flex-wrap sm:items-center sm:p-4">
+          <div className="mb-4 flex items-center justify-between">
+            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Compare The Best ERP Systems
+            </p>
+            {activeFiltersCount > 0 && (
+              <div className="animate-fade-in flex items-center gap-2">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-white">
+                  {activeFiltersCount}
+                </span>
+                <span className="text-xs text-muted-foreground">filters active</span>
+              </div>
+            )}
+          </div>
+          <div className={cn(
+            "flex flex-col gap-3 rounded-lg border bg-card p-3 transition-all duration-300 sm:flex-row sm:flex-wrap sm:items-center sm:p-4",
+            filtersChanged && "ring-2 ring-accent/20"
+          )}>
             <div className="flex flex-1 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
               {/* Industry Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex min-w-[140px] items-center justify-between gap-2 rounded-md border bg-background px-3 py-2 text-left text-sm transition-colors hover:bg-muted sm:min-w-[160px]">
-                    <span className={selectedIndustry ? "text-foreground" : "text-muted-foreground"}>
-                      {selectedIndustry || "Industry"}
+                  <button className={cn(
+                    "flex min-w-[140px] items-center justify-between gap-2 rounded-md border px-3 py-2 text-left text-sm transition-all duration-200 sm:min-w-[160px]",
+                    selectedIndustry 
+                      ? "border-accent/50 bg-accent/5 text-foreground" 
+                      : "bg-background text-muted-foreground hover:bg-muted"
+                  )}>
+                    <span className={cn(
+                      "transition-colors duration-200",
+                      selectedIndustry ? "text-foreground font-medium" : "text-muted-foreground"
+                    )}>
+                      {allIndustries?.find(i => i.slug === selectedIndustry)?.name || "Industry"}
                     </span>
-                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    <ChevronDown className={cn(
+                      "h-4 w-4 transition-transform duration-200",
+                      selectedIndustry && "text-accent"
+                    )} />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-[200px] bg-background" align="start">
-                  <DropdownMenuItem onClick={() => setSelectedIndustry(null)}>
+                <DropdownMenuContent className="w-[220px] animate-scale-in bg-background" align="start">
+                  <DropdownMenuItem 
+                    onClick={() => setSelectedIndustry(null)}
+                    className="text-muted-foreground"
+                  >
                     All Industries
                   </DropdownMenuItem>
                   {allIndustries?.map((industry) => (
                     <DropdownMenuItem 
                       key={industry.id} 
                       onClick={() => setSelectedIndustry(industry.slug)}
-                      className={selectedIndustry === industry.slug ? "bg-accent/10" : ""}
+                      className={cn(
+                        "transition-colors",
+                        selectedIndustry === industry.slug && "bg-accent/10 text-accent font-medium"
+                      )}
                     >
                       {industry.name}
                     </DropdownMenuItem>
@@ -324,22 +331,39 @@ export default function Index() {
               {/* Company Size Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex min-w-[140px] items-center justify-between gap-2 rounded-md border bg-background px-3 py-2 text-left text-sm transition-colors hover:bg-muted sm:min-w-[160px]">
-                    <span className={selectedSize ? "text-foreground" : "text-muted-foreground"}>
+                  <button className={cn(
+                    "flex min-w-[140px] items-center justify-between gap-2 rounded-md border px-3 py-2 text-left text-sm transition-all duration-200 sm:min-w-[160px]",
+                    selectedSize 
+                      ? "border-accent/50 bg-accent/5 text-foreground" 
+                      : "bg-background text-muted-foreground hover:bg-muted"
+                  )}>
+                    <span className={cn(
+                      "transition-colors duration-200",
+                      selectedSize ? "text-foreground font-medium" : "text-muted-foreground"
+                    )}>
                       {selectedSize || "Company Size"}
                     </span>
-                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    <ChevronDown className={cn(
+                      "h-4 w-4 transition-transform duration-200",
+                      selectedSize && "text-accent"
+                    )} />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-[180px] bg-background" align="start">
-                  <DropdownMenuItem onClick={() => setSelectedSize(null)}>
+                <DropdownMenuContent className="w-[180px] animate-scale-in bg-background" align="start">
+                  <DropdownMenuItem 
+                    onClick={() => setSelectedSize(null)}
+                    className="text-muted-foreground"
+                  >
                     All Sizes
                   </DropdownMenuItem>
                   {companySizeOptions.map((size) => (
                     <DropdownMenuItem 
                       key={size} 
                       onClick={() => setSelectedSize(size)}
-                      className={selectedSize === size ? "bg-accent/10" : ""}
+                      className={cn(
+                        "transition-colors",
+                        selectedSize === size && "bg-accent/10 text-accent font-medium"
+                      )}
                     >
                       {size}
                     </DropdownMenuItem>
@@ -350,22 +374,39 @@ export default function Index() {
               {/* Deployment Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex min-w-[140px] items-center justify-between gap-2 rounded-md border bg-background px-3 py-2 text-left text-sm transition-colors hover:bg-muted sm:min-w-[160px]">
-                    <span className={selectedDeployment ? "text-foreground" : "text-muted-foreground"}>
+                  <button className={cn(
+                    "flex min-w-[140px] items-center justify-between gap-2 rounded-md border px-3 py-2 text-left text-sm transition-all duration-200 sm:min-w-[160px]",
+                    selectedDeployment 
+                      ? "border-accent/50 bg-accent/5 text-foreground" 
+                      : "bg-background text-muted-foreground hover:bg-muted"
+                  )}>
+                    <span className={cn(
+                      "transition-colors duration-200",
+                      selectedDeployment ? "text-foreground font-medium" : "text-muted-foreground"
+                    )}>
                       {selectedDeployment || "Deployment"}
                     </span>
-                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    <ChevronDown className={cn(
+                      "h-4 w-4 transition-transform duration-200",
+                      selectedDeployment && "text-accent"
+                    )} />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-[160px] bg-background" align="start">
-                  <DropdownMenuItem onClick={() => setSelectedDeployment(null)}>
+                <DropdownMenuContent className="w-[160px] animate-scale-in bg-background" align="start">
+                  <DropdownMenuItem 
+                    onClick={() => setSelectedDeployment(null)}
+                    className="text-muted-foreground"
+                  >
                     All Types
                   </DropdownMenuItem>
                   {deploymentOptions.map((type) => (
                     <DropdownMenuItem 
                       key={type} 
                       onClick={() => setSelectedDeployment(type)}
-                      className={selectedDeployment === type ? "bg-accent/10" : ""}
+                      className={cn(
+                        "transition-colors",
+                        selectedDeployment === type && "bg-accent/10 text-accent font-medium"
+                      )}
                     >
                       {type}
                     </DropdownMenuItem>
@@ -373,19 +414,26 @@ export default function Index() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* Clear filters button */}
-              {(selectedIndustry || selectedSize || selectedDeployment) && (
+              {/* Clear filters button with animation */}
+              {activeFiltersCount > 0 && (
                 <button 
                   onClick={clearFilters}
-                  className="flex h-10 items-center justify-center rounded-md border bg-background px-3 text-sm text-muted-foreground hover:bg-muted"
+                  className="flex h-10 animate-fade-in items-center justify-center gap-1.5 rounded-md border border-destructive/30 bg-destructive/5 px-3 text-sm text-destructive transition-colors hover:bg-destructive/10"
                 >
-                  Clear
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Clear All
                 </button>
               )}
             </div>
-            <Button onClick={handleSearch} className="w-full bg-accent hover:bg-accent/90 sm:w-auto">
+            <Button 
+              onClick={handleSearch} 
+              className={cn(
+                "w-full bg-accent transition-all duration-200 hover:bg-accent/90 sm:w-auto",
+                activeFiltersCount > 0 && "animate-pulse"
+              )}
+            >
               <Search className="mr-2 h-4 w-4" />
-              Search
+              Search {activeFiltersCount > 0 && `(${activeFiltersCount})`}
             </Button>
           </div>
         </div>
