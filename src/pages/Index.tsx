@@ -6,7 +6,7 @@ import { VendorCard } from "@/components/vendors/VendorCard";
 import { IndustryCard } from "@/components/industries/IndustryCard";
 import { CompareFloatingBar } from "@/components/compare/CompareFloatingBar";
 import { VendorSearchAutocomplete } from "@/components/home/VendorSearchAutocomplete";
-import { ComparisonPreviewCard } from "@/components/home/ComparisonPreviewCard";
+import { HeroLogoGrid } from "@/components/home/HeroLogoGrid";
 import { HeroComparePreview } from "@/components/home/HeroComparePreview";
 import { useVendors } from "@/hooks/useVendors";
 import { useIndustries } from "@/hooks/useIndustries";
@@ -19,61 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
-// Comparison preview data matching the PDF with enhanced data
-const comparisonData = [
-  { 
-    brand: "ORACLE", 
-    name: "NetSuite ERP", 
-    slug: "oracle-netsuite",
-    priceRange: "$10K - $100K", 
-    costPerUser: "$125/mo", 
-    deployment: ["Cloud", "On-Prem"], 
-    retention: "N/A",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/3/36/Logo.min.svg",
-    description: "Cloud-based ERP suite for growing businesses with strong financials and inventory management.",
-    pros: ["Unified cloud platform", "Strong financials", "Scalable for growth"],
-    implementation: "3-6 months"
-  },
-  { 
-    brand: "SAP", 
-    name: "SAP S/4HANA", 
-    slug: "sap-s4hana",
-    priceRange: "N/A", 
-    costPerUser: "$2,000/mo", 
-    deployment: ["Cloud", "On-Prem"], 
-    retention: "78%",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg",
-    description: "Next-generation ERP with AI-powered insights for large enterprises.",
-    pros: ["Advanced analytics", "Global scalability", "Industry solutions"],
-    implementation: "12+ months"
-  },
-  { 
-    brand: "CETEC", 
-    name: "Cetec ERP", 
-    slug: "cetec-erp",
-    priceRange: "$3K - $40K", 
-    costPerUser: "$40/mo", 
-    deployment: ["Cloud", "On-Prem"], 
-    retention: "95%",
-    logo: null,
-    description: "Affordable cloud ERP designed specifically for small manufacturers.",
-    pros: ["Low cost entry", "Quick implementation", "Manufacturing focus"],
-    implementation: "<3 months"
-  },
-  { 
-    brand: "EPICOR", 
-    name: "Epicor Kinetic", 
-    slug: "epicor-kinetic",
-    priceRange: "$4K - $500K", 
-    costPerUser: "$125/mo", 
-    deployment: ["Cloud", "On-Prem"], 
-    retention: "87%",
-    logo: "https://www.epicor.com/globalassets/epicor-logo-2021.svg",
-    description: "Industry-specific ERP built for manufacturing and distribution.",
-    pros: ["Manufacturing expertise", "Flexible deployment", "Strong support"],
-    implementation: "6-12 months"
-  },
-];
+// Featured vendor logos with real URLs
 
 // Featured vendor logos with real URLs
 const featuredLogos = [
@@ -235,8 +181,8 @@ export default function Index() {
               </div>
             </div>
 
-            {/* Right side - Comparison preview card with hover effects */}
-            <ComparisonPreviewCard vendors={comparisonData} />
+            {/* Right side - Logo grid with hover popups */}
+            <HeroLogoGrid />
           </div>
         </div>
       </section>
