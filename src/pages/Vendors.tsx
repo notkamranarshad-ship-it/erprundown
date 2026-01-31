@@ -261,38 +261,66 @@ export default function VendorsPage() {
               <div className="mb-4 flex flex-wrap items-center gap-2">
                 <span className="text-sm text-muted-foreground">Active filters:</span>
                 {selectedDeployment.map((d) => (
-                  <Badge key={d} variant="secondary" className="gap-1">
-                    {d}
+                  <Badge key={`dep-${d}`} variant="secondary" className="gap-1 pl-2">
+                    Deployment: {d}
                     <button
                       onClick={() => updateFilter("deployment", d, false)}
-                      className="ml-1 hover:text-destructive"
+                      className="ml-1 rounded-full p-0.5 hover:bg-destructive/20 hover:text-destructive"
                     >
                       <X className="h-3 w-3" />
                     </button>
                   </Badge>
                 ))}
                 {selectedSize.map((s) => (
-                  <Badge key={s} variant="secondary" className="gap-1">
-                    {s}
+                  <Badge key={`size-${s}`} variant="secondary" className="gap-1 pl-2">
+                    Size: {s}
                     <button
                       onClick={() => updateFilter("size", s, false)}
-                      className="ml-1 hover:text-destructive"
+                      className="ml-1 rounded-full p-0.5 hover:bg-destructive/20 hover:text-destructive"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+                {selectedPricing.map((p) => (
+                  <Badge key={`price-${p}`} variant="secondary" className="gap-1 pl-2">
+                    Pricing: {p}
+                    <button
+                      onClick={() => updateFilter("pricing", p, false)}
+                      className="ml-1 rounded-full p-0.5 hover:bg-destructive/20 hover:text-destructive"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+                {selectedImplementation.map((i) => (
+                  <Badge key={`impl-${i}`} variant="secondary" className="gap-1 pl-2">
+                    Implementation: {i}
+                    <button
+                      onClick={() => updateFilter("implementation", i, false)}
+                      className="ml-1 rounded-full p-0.5 hover:bg-destructive/20 hover:text-destructive"
                     >
                       <X className="h-3 w-3" />
                     </button>
                   </Badge>
                 ))}
                 {selectedIndustry && (
-                  <Badge variant="secondary" className="gap-1">
-                    {industries?.find((i) => i.slug === selectedIndustry)?.name}
+                  <Badge variant="secondary" className="gap-1 pl-2">
+                    Industry: {getFilterLabel("industry", selectedIndustry)}
                     <button
                       onClick={() => updateFilter("industry", "", true)}
-                      className="ml-1 hover:text-destructive"
+                      className="ml-1 rounded-full p-0.5 hover:bg-destructive/20 hover:text-destructive"
                     >
                       <X className="h-3 w-3" />
                     </button>
                   </Badge>
                 )}
+                <button
+                  onClick={clearFilters}
+                  className="text-xs text-accent hover:underline ml-2"
+                >
+                  Clear all
+                </button>
               </div>
             )}
 
