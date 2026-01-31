@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Search, Filter, Grid, List, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,17 +18,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { VendorCard } from "@/components/vendors/VendorCard";
+import { VendorSidebar } from "@/components/vendors/VendorSidebar";
 import { CompareFloatingBar } from "@/components/compare/CompareFloatingBar";
 import { useVendors } from "@/hooks/useVendors";
 import { useIndustries } from "@/hooks/useIndustries";
-import type { DeploymentType, CompanySize } from "@/types/database";
-
-const deploymentOptions: DeploymentType[] = ["SaaS", "On-Prem", "Hybrid"];
-const companySizeOptions: CompanySize[] = ["Small", "Mid-market", "Enterprise"];
 
 export default function VendorsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -37,10 +32,11 @@ export default function VendorsPage() {
 
   const searchQuery = searchParams.get("search") || "";
   const selectedDeployment = searchParams.getAll("deployment");
-  // Support both single "size" param and multiple "size[]" params
   const sizeParam = searchParams.get("size");
   const selectedSize = sizeParam ? [sizeParam] : searchParams.getAll("size");
   const selectedIndustry = searchParams.get("industry") || "";
+  const selectedPricing = searchParams.getAll("pricing");
+  const selectedImplementation = searchParams.getAll("implementation");
   const sortBy = searchParams.get("sort") || "featured";
 
   const { data: vendors, isLoading } = useVendors({ search: searchQuery });
@@ -75,6 +71,18 @@ export default function VendorsPage() {
         if (!hasMatch) return false;
       }
 
+      // Pricing filter
+      if (selectedPricing.length > 0) {
+        const hasMatch = selectedPricing.includes(vendor.pricing_stance || "");
+        if (!hasMatch) return false;
+      }
+
+      // Implementation time filter
+      if (selectedImplementation.length > 0) {
+        const hasMatch = selectedImplementation.includes(vendor.implementation_time || "");
+        if (!hasMatch) return false;
+      }
+
       return true;
     }).sort((a, b) => {
       if (sortBy === "featured") {
@@ -83,11 +91,13 @@ export default function VendorsPage() {
       }
       return a.name.localeCompare(b.name);
     });
-  }, [vendors, selectedDeployment, selectedSize, selectedIndustry, sortBy]);
+  }, [vendors, selectedDeployment, selectedSize, selectedIndustry, selectedPricing, selectedImplementation, sortBy]);
 
   const updateFilter = (key: string, value: string, add: boolean) => {
     const current = new URLSearchParams(searchParams);
-    if (key === "deployment" || key === "size") {
+    const multiValueKeys = ["deployment", "size", "pricing", "implementation"];
+    
+    if (multiValueKeys.includes(key)) {
       if (add) {
         current.append(key, value);
       } else {
@@ -114,80 +124,16 @@ export default function VendorsPage() {
   const activeFilterCount =
     selectedDeployment.length +
     selectedSize.length +
+    selectedPricing.length +
+    selectedImplementation.length +
     (selectedIndustry ? 1 : 0);
 
-  const FilterContent = () => (
-    <div className="space-y-6">
-      {/* Deployment Type */}
-      <div>
-        <h4 className="mb-3 font-medium text-foreground">Deployment</h4>
-        <div className="space-y-2">
-          {deploymentOptions.map((option) => (
-            <div key={option} className="flex items-center space-x-2">
-              <Checkbox
-                id={`deployment-${option}`}
-                checked={selectedDeployment.includes(option)}
-                onCheckedChange={(checked) =>
-                  updateFilter("deployment", option, !!checked)
-                }
-              />
-              <Label htmlFor={`deployment-${option}`} className="text-sm">
-                {option}
-              </Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Company Size */}
-      <div>
-        <h4 className="mb-3 font-medium text-foreground">Company Size</h4>
-        <div className="space-y-2">
-          {companySizeOptions.map((option) => (
-            <div key={option} className="flex items-center space-x-2">
-              <Checkbox
-                id={`size-${option}`}
-                checked={selectedSize.includes(option)}
-                onCheckedChange={(checked) =>
-                  updateFilter("size", option, !!checked)
-                }
-              />
-              <Label htmlFor={`size-${option}`} className="text-sm">
-                {option}
-              </Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Industry */}
-      <div>
-        <h4 className="mb-3 font-medium text-foreground">Industry</h4>
-        <Select
-          value={selectedIndustry}
-          onValueChange={(value) => updateFilter("industry", value, true)}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="All industries" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">All industries</SelectItem>
-            {industries?.map((ind) => (
-              <SelectItem key={ind.id} value={ind.slug}>
-                {ind.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {activeFilterCount > 0 && (
-        <Button variant="outline" className="w-full" onClick={clearFilters}>
-          Clear Filters
-        </Button>
-      )}
-    </div>
-  );
+  const getFilterLabel = (key: string, value: string) => {
+    if (key === "industry") {
+      return industries?.find((i) => i.slug === value)?.name || value;
+    }
+    return value;
+  };
 
   return (
     <PageLayout>
@@ -204,12 +150,20 @@ export default function VendorsPage() {
       <div className="container-page py-8">
         <div className="flex gap-8">
           {/* Sidebar Filters - Desktop */}
-          <aside className="hidden w-64 shrink-0 lg:block">
+          <div className="hidden w-72 shrink-0 lg:block">
             <div className="sticky top-24">
-              <h3 className="mb-4 font-semibold text-foreground">Filters</h3>
-              <FilterContent />
+              <VendorSidebar
+                selectedDeployment={selectedDeployment}
+                selectedSize={selectedSize}
+                selectedIndustry={selectedIndustry}
+                selectedPricing={selectedPricing}
+                selectedImplementation={selectedImplementation}
+                onUpdateFilter={updateFilter}
+                onClearFilters={clearFilters}
+                activeFilterCount={activeFilterCount}
+              />
             </div>
-          </aside>
+          </div>
 
           {/* Main Content */}
           <div className="flex-1">
@@ -248,12 +202,21 @@ export default function VendorsPage() {
                     )}
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left">
+                <SheetContent side="left" className="w-80 overflow-y-auto">
                   <SheetHeader>
                     <SheetTitle>Filters</SheetTitle>
                   </SheetHeader>
                   <div className="mt-6">
-                    <FilterContent />
+                    <VendorSidebar
+                      selectedDeployment={selectedDeployment}
+                      selectedSize={selectedSize}
+                      selectedIndustry={selectedIndustry}
+                      selectedPricing={selectedPricing}
+                      selectedImplementation={selectedImplementation}
+                      onUpdateFilter={updateFilter}
+                      onClearFilters={clearFilters}
+                      activeFilterCount={activeFilterCount}
+                    />
                   </div>
                 </SheetContent>
               </Sheet>
