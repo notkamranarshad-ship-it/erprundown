@@ -284,6 +284,72 @@ export type Database = {
         }
         Relationships: []
       }
+      partners: {
+        Row: {
+          certifications: string[] | null
+          created_at: string
+          employees_count: string | null
+          erp_specializations: string[] | null
+          featured: boolean | null
+          headquarters: string | null
+          id: string
+          industries_served: string[] | null
+          logo_url: string | null
+          long_description: string | null
+          name: string
+          notable_clients: string[] | null
+          regions_served: string[] | null
+          services_offered: string[] | null
+          short_description: string | null
+          slug: string
+          updated_at: string
+          website_url: string | null
+          year_founded: number | null
+        }
+        Insert: {
+          certifications?: string[] | null
+          created_at?: string
+          employees_count?: string | null
+          erp_specializations?: string[] | null
+          featured?: boolean | null
+          headquarters?: string | null
+          id?: string
+          industries_served?: string[] | null
+          logo_url?: string | null
+          long_description?: string | null
+          name: string
+          notable_clients?: string[] | null
+          regions_served?: string[] | null
+          services_offered?: string[] | null
+          short_description?: string | null
+          slug: string
+          updated_at?: string
+          website_url?: string | null
+          year_founded?: number | null
+        }
+        Update: {
+          certifications?: string[] | null
+          created_at?: string
+          employees_count?: string | null
+          erp_specializations?: string[] | null
+          featured?: boolean | null
+          headquarters?: string | null
+          id?: string
+          industries_served?: string[] | null
+          logo_url?: string | null
+          long_description?: string | null
+          name?: string
+          notable_clients?: string[] | null
+          regions_served?: string[] | null
+          services_offered?: string[] | null
+          short_description?: string | null
+          slug?: string
+          updated_at?: string
+          website_url?: string | null
+          year_founded?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -394,6 +460,7 @@ export type Database = {
       }
       vendors: {
         Row: {
+          awards: string[] | null
           company_size_fit: Database["public"]["Enums"]["company_size"][] | null
           cons: string[] | null
           created_at: string
@@ -404,20 +471,26 @@ export type Database = {
             | Database["public"]["Enums"]["implementation_time"]
             | null
           integrations: string[] | null
+          key_differentiators: string[] | null
           logo_url: string | null
           long_description: string | null
           name: string
+          partner_names: string[] | null
           pricing_stance: Database["public"]["Enums"]["pricing_stance"] | null
           pros: string[] | null
+          reviews_count: number | null
           screenshots: string[] | null
           short_description: string | null
           slug: string
           sponsor_label: string | null
           sponsored: boolean | null
+          top_clients: string[] | null
           updated_at: string
+          user_rating: number | null
           website_url: string | null
         }
         Insert: {
+          awards?: string[] | null
           company_size_fit?:
             | Database["public"]["Enums"]["company_size"][]
             | null
@@ -430,20 +503,26 @@ export type Database = {
             | Database["public"]["Enums"]["implementation_time"]
             | null
           integrations?: string[] | null
+          key_differentiators?: string[] | null
           logo_url?: string | null
           long_description?: string | null
           name: string
+          partner_names?: string[] | null
           pricing_stance?: Database["public"]["Enums"]["pricing_stance"] | null
           pros?: string[] | null
+          reviews_count?: number | null
           screenshots?: string[] | null
           short_description?: string | null
           slug: string
           sponsor_label?: string | null
           sponsored?: boolean | null
+          top_clients?: string[] | null
           updated_at?: string
+          user_rating?: number | null
           website_url?: string | null
         }
         Update: {
+          awards?: string[] | null
           company_size_fit?:
             | Database["public"]["Enums"]["company_size"][]
             | null
@@ -456,17 +535,22 @@ export type Database = {
             | Database["public"]["Enums"]["implementation_time"]
             | null
           integrations?: string[] | null
+          key_differentiators?: string[] | null
           logo_url?: string | null
           long_description?: string | null
           name?: string
+          partner_names?: string[] | null
           pricing_stance?: Database["public"]["Enums"]["pricing_stance"] | null
           pros?: string[] | null
+          reviews_count?: number | null
           screenshots?: string[] | null
           short_description?: string | null
           slug?: string
           sponsor_label?: string | null
           sponsored?: boolean | null
+          top_clients?: string[] | null
           updated_at?: string
+          user_rating?: number | null
           website_url?: string | null
         }
         Relationships: []
