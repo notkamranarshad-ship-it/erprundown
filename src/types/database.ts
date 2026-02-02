@@ -16,17 +16,23 @@ export interface Vendor {
   short_description: string | null;
   long_description: string | null;
   website_url: string | null;
-  deployment: DeploymentType[];
-  company_size_fit: CompanySize[];
-  integrations: string[];
-  pricing_stance: PricingStance;
-  implementation_time: ImplementationTime;
-  pros: string[];
-  cons: string[];
-  screenshots: string[];
-  featured: boolean;
-  sponsored: boolean;
+  deployment: DeploymentType[] | null;
+  company_size_fit: CompanySize[] | null;
+  integrations: string[] | null;
+  pricing_stance: PricingStance | null;
+  implementation_time: ImplementationTime | null;
+  pros: string[] | null;
+  cons: string[] | null;
+  screenshots: string[] | null;
+  featured: boolean | null;
+  sponsored: boolean | null;
   sponsor_label: string | null;
+  top_clients: string[] | null;
+  partner_names: string[] | null;
+  key_differentiators: string[] | null;
+  awards: string[] | null;
+  user_rating: number | null;
+  reviews_count: number | null;
   created_at: string;
   updated_at: string;
   // Relations
@@ -134,4 +140,26 @@ export interface UserRole {
   user_id: string;
   role: AppRole;
   created_at: string;
+}
+
+export interface Partner {
+  id: string;
+  name: string;
+  slug: string;
+  logo_url: string | null;
+  short_description: string | null;
+  long_description: string | null;
+  website_url: string | null;
+  headquarters: string | null;
+  year_founded: number | null;
+  employees_count: string | null;
+  regions_served: string[] | null;
+  erp_specializations: string[] | null;
+  industries_served: string[] | null;
+  services_offered: string[] | null;
+  certifications: string[] | null;
+  notable_clients: string[] | null;
+  featured: boolean | null;
+  created_at: string;
+  updated_at: string;
 }
