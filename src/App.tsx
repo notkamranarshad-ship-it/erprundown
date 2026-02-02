@@ -9,6 +9,8 @@ import VendorDetail from "./pages/VendorDetail";
 import Industries from "./pages/Industries";
 import IndustryDetail from "./pages/IndustryDetail";
 import Compare from "./pages/Compare";
+import Partners from "./pages/Partners";
+import PartnerDetail from "./pages/PartnerDetail";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import CaseStudies from "./pages/CaseStudies";
@@ -35,6 +37,8 @@ const App = () => (
           <Route path="/industries" element={<Industries />} />
           <Route path="/industries/:slug" element={<IndustryDetail />} />
           <Route path="/compare" element={<Compare />} />
+          <Route path="/partners" element={<Partners />} />
+          <Route path="/partners/:slug" element={<PartnerDetail />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/case-studies" element={<CaseStudies />} />

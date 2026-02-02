@@ -38,6 +38,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/partners" className="text-muted-foreground hover:text-accent">
+                  Implementation Partners
+                </Link>
+              </li>
+              <li>
                 <Link to="/industries" className="text-muted-foreground hover:text-accent">
                   Industries
                 </Link>
@@ -50,11 +55,6 @@ export function Footer() {
               <li>
                 <Link to="/blog" className="text-muted-foreground hover:text-accent">
                   Blog
-                </Link>
-              </li>
-              <li>
-                <Link to="/case-studies" className="text-muted-foreground hover:text-accent">
-                  Case Studies
                 </Link>
               </li>
             </ul>

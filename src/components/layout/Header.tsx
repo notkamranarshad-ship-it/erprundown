@@ -8,10 +8,10 @@ import { useCompare } from "@/hooks/useCompare";
 
 const navLinks = [
   { href: "/vendors", label: "Vendors" },
+  { href: "/partners", label: "Partners" },
   { href: "/industries", label: "Industries" },
   { href: "/compare", label: "Compare" },
   { href: "/blog", label: "Blog" },
-  { href: "/case-studies", label: "Case Studies" },
 ];
 
 export function Header() {
