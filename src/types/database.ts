@@ -69,6 +69,11 @@ export interface BlogPost {
   content: string | null;
   category: string | null;
   author_name: string;
+  author_title: string | null;
+  co_author_name: string | null;
+  co_author_title: string | null;
+  verified_by_name: string | null;
+  verified_by_title: string | null;
   featured_image: string | null;
   published_at: string;
   updated_at: string;
