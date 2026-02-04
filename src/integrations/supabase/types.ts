@@ -77,7 +77,10 @@ export type Database = {
       blog_posts: {
         Row: {
           author_name: string | null
+          author_title: string | null
           category: string | null
+          co_author_name: string | null
+          co_author_title: string | null
           content: string | null
           created_at: string
           excerpt: string | null
@@ -87,10 +90,15 @@ export type Database = {
           slug: string
           title: string
           updated_at: string
+          verified_by_name: string | null
+          verified_by_title: string | null
         }
         Insert: {
           author_name?: string | null
+          author_title?: string | null
           category?: string | null
+          co_author_name?: string | null
+          co_author_title?: string | null
           content?: string | null
           created_at?: string
           excerpt?: string | null
@@ -100,10 +108,15 @@ export type Database = {
           slug: string
           title: string
           updated_at?: string
+          verified_by_name?: string | null
+          verified_by_title?: string | null
         }
         Update: {
           author_name?: string | null
+          author_title?: string | null
           category?: string | null
+          co_author_name?: string | null
+          co_author_title?: string | null
           content?: string | null
           created_at?: string
           excerpt?: string | null
@@ -113,6 +126,8 @@ export type Database = {
           slug?: string
           title?: string
           updated_at?: string
+          verified_by_name?: string | null
+          verified_by_title?: string | null
         }
         Relationships: []
       }

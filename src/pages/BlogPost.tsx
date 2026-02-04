@@ -1,14 +1,14 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Calendar, User, Clock, Share2, Bookmark, Facebook, Twitter, Linkedin } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Share2, Facebook, Twitter, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { BlogTableOfContents } from "@/components/blog/BlogTableOfContents";
 import { BlogSidebarCTA } from "@/components/blog/BlogSidebarCTA";
 import { BlogContentRenderer } from "@/components/blog/BlogContentRenderer";
 import { BlogInlineCTA } from "@/components/blog/BlogInlineCTA";
 import { RelatedPosts } from "@/components/blog/RelatedPosts";
+import { AuthorBio } from "@/components/blog/AuthorBio";
 import { VendorCard } from "@/components/vendors/VendorCard";
 import { useBlogPost, useBlogPosts } from "@/hooks/useBlogPosts";
 import { format } from "date-fns";
@@ -151,10 +151,6 @@ export default function BlogPostPage() {
               {/* Meta Info */}
               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
                 <span className="flex items-center gap-1.5">
-                  <User className="h-4 w-4" />
-                  {post.author_name}
-                </span>
-                <span className="flex items-center gap-1.5">
                   <Calendar className="h-4 w-4" />
                   {format(new Date(post.published_at), "MMMM d, yyyy")}
                 </span>
@@ -162,6 +158,18 @@ export default function BlogPostPage() {
                   <Clock className="h-4 w-4" />
                   {readingTime} min read
                 </span>
+              </div>
+
+              {/* Author Bio Section */}
+              <div className="mb-6 p-4 rounded-lg bg-muted/50 border border-border/50">
+                <AuthorBio
+                  authorName={post.author_name || "ERPRundown Team"}
+                  authorTitle={post.author_title}
+                  coAuthorName={post.co_author_name}
+                  coAuthorTitle={post.co_author_title}
+                  verifiedByName={post.verified_by_name}
+                  verifiedByTitle={post.verified_by_title}
+                />
               </div>
 
               {/* Share Buttons */}
