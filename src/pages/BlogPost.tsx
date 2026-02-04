@@ -13,17 +13,13 @@ import { AuthorBioFull } from "@/components/blog/AuthorBioFull";
 import { VendorCard } from "@/components/vendors/VendorCard";
 import { useBlogPost, useBlogPosts } from "@/hooks/useBlogPosts";
 import { format } from "date-fns";
+import kamranImage from "@/assets/authors/kamran-arshad.png";
 
 // Default author info
 const DEFAULT_AUTHOR = {
   name: "Kamran Arshad",
   title: "Founder at ERPRundown",
-  image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
-};
-
-const DEFAULT_VERIFIED_BY = {
-  name: "Umair Khan",
-  title: "Chairman Folio3",
+  image: kamranImage,
 };
 
 export default function BlogPostPage() {
@@ -227,8 +223,8 @@ export default function BlogPostPage() {
                       authorName={post.author_name || DEFAULT_AUTHOR.name}
                       authorTitle={post.author_title || DEFAULT_AUTHOR.title}
                       authorImage={DEFAULT_AUTHOR.image}
-                      verifiedByName={post.verified_by_name || DEFAULT_VERIFIED_BY.name}
-                      verifiedByTitle={post.verified_by_title || DEFAULT_VERIFIED_BY.title}
+                      verifiedByName={post.verified_by_name}
+                      verifiedByTitle={post.verified_by_title}
                     />
                   </div>
                   
