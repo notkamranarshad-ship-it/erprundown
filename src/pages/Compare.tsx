@@ -56,16 +56,16 @@ export default function ComparePage() {
       </section>
 
       <div className="container-page py-8 lg:py-12">
-        <div className="grid lg:grid-cols-12 gap-8">
-          {/* Left Sidebar */}
-          <aside className="hidden lg:block lg:col-span-2 xl:col-span-2">
+        <div className="flex flex-col xl:flex-row gap-8">
+          {/* Left Sidebar - Hidden on mobile/tablet, shown on xl */}
+          <aside className="hidden xl:block w-64 shrink-0">
             <div className="sticky top-24">
               <CompareSidebarLeft />
             </div>
           </aside>
 
           {/* Main Content */}
-          <main className="lg:col-span-8 xl:col-span-8">
+          <main className="flex-1 min-w-0">
             {/* Selection Controls */}
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3">
@@ -151,16 +151,16 @@ export default function ComparePage() {
             )}
           </main>
 
-          {/* Right Sidebar */}
-          <aside className="hidden lg:block lg:col-span-2 xl:col-span-2">
+          {/* Right Sidebar - Hidden on mobile/tablet, shown on xl */}
+          <aside className="hidden xl:block w-72 shrink-0">
             <div className="sticky top-24">
               <CompareSidebarRight selectedVendors={selectedSlugs} />
             </div>
           </aside>
         </div>
 
-        {/* Mobile Sidebars */}
-        <div className="lg:hidden mt-12 grid gap-6 sm:grid-cols-2">
+        {/* Mobile/Tablet Sidebars - Stacked on mobile, side by side on tablet */}
+        <div className="xl:hidden mt-12 space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-8">
           <CompareSidebarLeft />
           <CompareSidebarRight selectedVendors={selectedSlugs} />
         </div>

@@ -8,10 +8,23 @@ import { BlogSidebarCTA } from "@/components/blog/BlogSidebarCTA";
 import { BlogContentRenderer } from "@/components/blog/BlogContentRenderer";
 import { BlogInlineCTA } from "@/components/blog/BlogInlineCTA";
 import { RelatedPosts } from "@/components/blog/RelatedPosts";
-import { AuthorBio } from "@/components/blog/AuthorBio";
+import { AuthorBioHeader } from "@/components/blog/AuthorBioHeader";
+import { AuthorBioFull } from "@/components/blog/AuthorBioFull";
 import { VendorCard } from "@/components/vendors/VendorCard";
 import { useBlogPost, useBlogPosts } from "@/hooks/useBlogPosts";
 import { format } from "date-fns";
+
+// Default author info
+const DEFAULT_AUTHOR = {
+  name: "Kamran Arshad",
+  title: "Founder at ERPRundown",
+  image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
+};
+
+const DEFAULT_VERIFIED_BY = {
+  name: "Umair Khan",
+  title: "Chairman Folio3",
+};
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -148,27 +161,21 @@ export default function BlogPostPage() {
                 {post.title}
               </h1>
 
-              {/* Meta Info */}
-              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
-                <span className="flex items-center gap-1.5">
-                  <Calendar className="h-4 w-4" />
-                  {format(new Date(post.published_at), "MMMM d, yyyy")}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Clock className="h-4 w-4" />
-                  {readingTime} min read
-                </span>
-              </div>
-
-              {/* Author Bio Section */}
-              <div className="mb-6 p-4 rounded-lg bg-muted/50 border border-border/50">
-                <AuthorBio
-                  authorName={post.author_name || "ERPRundown Team"}
-                  authorTitle={post.author_title}
-                  coAuthorName={post.co_author_name}
-                  coAuthorTitle={post.co_author_title}
-                  verifiedByName={post.verified_by_name}
-                  verifiedByTitle={post.verified_by_title}
+              {/* Meta Info with Author Header */}
+              <div className="flex flex-wrap items-center justify-between gap-4 text-sm text-muted-foreground mb-6">
+                <div className="flex flex-wrap items-center gap-4">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="h-4 w-4" />
+                    {format(new Date(post.published_at), "MMMM d, yyyy")}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="h-4 w-4" />
+                    {readingTime} min read
+                  </span>
+                </div>
+                <AuthorBioHeader
+                  authorName={post.author_name || DEFAULT_AUTHOR.name}
+                  authorImage={DEFAULT_AUTHOR.image}
                 />
               </div>
 
@@ -213,6 +220,17 @@ export default function BlogPostPage() {
               {post.content ? (
                 <>
                   <BlogContentRenderer content={post.content} />
+                  
+                  {/* Full Author Bio at end of content */}
+                  <div className="mt-12 pt-8 border-t border-border">
+                    <AuthorBioFull
+                      authorName={post.author_name || DEFAULT_AUTHOR.name}
+                      authorTitle={post.author_title || DEFAULT_AUTHOR.title}
+                      authorImage={DEFAULT_AUTHOR.image}
+                      verifiedByName={post.verified_by_name || DEFAULT_VERIFIED_BY.name}
+                      verifiedByTitle={post.verified_by_title || DEFAULT_VERIFIED_BY.title}
+                    />
+                  </div>
                   
                   {/* Inline CTA after content */}
                   <BlogInlineCTA

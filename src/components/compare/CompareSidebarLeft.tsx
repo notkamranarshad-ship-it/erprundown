@@ -60,21 +60,21 @@ export function CompareSidebarLeft() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Popular Comparisons */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm flex items-center gap-2">
-            <FileText className="h-4 w-4" />
+      <Card className="shadow-sm">
+        <CardHeader className="pb-2 px-4 pt-4">
+          <CardTitle className="text-sm font-semibold flex items-center gap-2">
+            <FileText className="h-4 w-4 text-primary" />
             Popular Comparisons
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="space-y-1 px-4 pb-4">
           {popularComparisons.map((comp) => (
             <a
               key={comp.slug}
               href={`/blog/${comp.slug}`}
-              className="block text-sm text-muted-foreground hover:text-foreground transition-colors py-1.5 border-b border-border/50 last:border-0"
+              className="block text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors py-2 px-2 rounded-md -mx-2"
             >
               {comp.title}
             </a>
@@ -83,37 +83,38 @@ export function CompareSidebarLeft() {
       </Card>
 
       {/* Downloadable Comparisons */}
-      <Card>
+      <Card className="shadow-sm">
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
           <CollapsibleTrigger asChild>
-            <CardHeader className="pb-3 cursor-pointer hover:bg-muted/50 transition-colors">
-              <CardTitle className="text-sm flex items-center justify-between">
+            <CardHeader className="pb-2 px-4 pt-4 cursor-pointer hover:bg-muted/50 transition-colors rounded-t-lg">
+              <CardTitle className="text-sm font-semibold flex items-center justify-between">
                 <span className="flex items-center gap-2">
-                  <Download className="h-4 w-4" />
-                  Download Comparisons
+                  <Download className="h-4 w-4 text-primary" />
+                  Download Reports
                 </span>
                 {isOpen ? (
-                  <ChevronUp className="h-4 w-4" />
+                  <ChevronUp className="h-4 w-4 text-muted-foreground" />
                 ) : (
-                  <ChevronDown className="h-4 w-4" />
+                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
                 )}
               </CardTitle>
             </CardHeader>
           </CollapsibleTrigger>
           <CollapsibleContent>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
+            <CardContent className="px-4 pb-4">
+              <form onSubmit={handleSubmit} className="space-y-3">
                 <p className="text-xs text-muted-foreground">
-                  Select the comparisons you want and we'll send them to your email.
+                  Select reports and we'll email them to you.
                 </p>
 
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {downloadableComparisons.map((comp) => (
-                    <div key={comp.id} className="flex items-start gap-2">
+                    <div key={comp.id} className="flex items-center gap-2">
                       <Checkbox
                         id={comp.id}
                         checked={selectedDownloads.includes(comp.id)}
                         onCheckedChange={() => toggleDownload(comp.id)}
+                        className="h-4 w-4"
                       />
                       <Label
                         htmlFor={comp.id}
@@ -125,23 +126,23 @@ export function CompareSidebarLeft() {
                   ))}
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 pt-2">
                   <Input
                     type="email"
-                    placeholder="Your email address"
+                    placeholder="Your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-9 text-sm"
+                    className="h-8 text-sm"
                     required
                   />
-                <Button
+                  <Button
                     type="submit"
                     size="sm"
-                    className="w-full gap-2"
+                    className="w-full gap-1.5 h-8 text-xs"
                     disabled={submitLead.isPending || selectedDownloads.length === 0}
                   >
-                    <Send className="h-3.5 w-3.5" />
-                    {submitLead.isPending ? "Sending..." : "Send to My Email"}
+                    <Send className="h-3 w-3" />
+                    {submitLead.isPending ? "Sending..." : "Send Reports"}
                   </Button>
                 </div>
               </form>

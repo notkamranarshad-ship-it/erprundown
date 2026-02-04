@@ -54,17 +54,17 @@ export function CompareSidebarRight({ selectedVendors = [] }: CompareSidebarRigh
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* CTA Card */}
-      <Card className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground border-0">
-        <CardContent className="p-6 text-center">
-          <h3 className="font-bold text-lg mb-2">Need Expert Guidance?</h3>
-          <p className="text-sm text-primary-foreground/80 mb-4">
+      <Card className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground border-0 shadow-lg">
+        <CardContent className="p-5 text-center">
+          <h3 className="font-bold text-base mb-2">Need Expert Guidance?</h3>
+          <p className="text-xs text-primary-foreground/80 mb-4">
             Get personalized ERP recommendations from our experts.
           </p>
           <LeadForm
             vendorSlugs={selectedVendors}
-            triggerLabel="Get Free Consultation"
+            triggerLabel="Free Consultation"
             title="Request Expert Consultation"
             description="Our ERP specialists will help you choose the right solution."
             triggerVariant="secondary"
@@ -73,26 +73,27 @@ export function CompareSidebarRight({ selectedVendors = [] }: CompareSidebarRigh
       </Card>
 
       {/* Best Practices Guides */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm flex items-center gap-2">
-            <BookOpen className="h-4 w-4" />
+      <Card className="shadow-sm">
+        <CardHeader className="pb-2 px-4 pt-4">
+          <CardTitle className="text-sm font-semibold flex items-center gap-2">
+            <BookOpen className="h-4 w-4 text-primary" />
             Best Practices Guides
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <CardContent className="px-4 pb-4">
+          <form onSubmit={handleSubmit} className="space-y-3">
             <p className="text-xs text-muted-foreground">
-              Download our expert guides to ensure a successful ERP journey.
+              Download expert guides for ERP success.
             </p>
 
-            <div className="space-y-3">
+            <div className="space-y-2">
               {bestPracticesGuides.map((guide) => (
-                <div key={guide.id} className="flex items-start gap-2">
+                <div key={guide.id} className="flex items-center gap-2">
                   <Checkbox
                     id={`guide-${guide.id}`}
                     checked={selectedGuides.includes(guide.id)}
                     onCheckedChange={() => toggleGuide(guide.id)}
+                    className="h-4 w-4"
                   />
                   <Label
                     htmlFor={`guide-${guide.id}`}
@@ -104,22 +105,22 @@ export function CompareSidebarRight({ selectedVendors = [] }: CompareSidebarRigh
               ))}
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 pt-2">
               <Input
                 type="email"
-                placeholder="Your email address"
+                placeholder="Your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-9 text-sm"
+                className="h-8 text-sm"
                 required
               />
               <Button
                 type="submit"
                 size="sm"
-                className="w-full gap-2"
+                className="w-full gap-1.5 h-8 text-xs"
                 disabled={submitLead.isPending || selectedGuides.length === 0}
               >
-                <Download className="h-3.5 w-3.5" />
+                <Download className="h-3 w-3" />
                 {submitLead.isPending ? "Sending..." : "Get Guides"}
               </Button>
             </div>
@@ -128,28 +129,28 @@ export function CompareSidebarRight({ selectedVendors = [] }: CompareSidebarRigh
       </Card>
 
       {/* Quick Links */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm">Quick Links</CardTitle>
+      <Card className="shadow-sm">
+        <CardHeader className="pb-2 px-4 pt-4">
+          <CardTitle className="text-sm font-semibold">Quick Links</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="space-y-1 px-4 pb-4">
           <a
             href="/vendors"
-            className="flex items-center justify-between text-sm text-muted-foreground hover:text-foreground transition-colors py-2 border-b border-border/50"
+            className="flex items-center justify-between text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors py-2 px-2 rounded-md -mx-2"
           >
             Browse All Vendors
             <ArrowRight className="h-4 w-4" />
           </a>
           <a
             href="/industries"
-            className="flex items-center justify-between text-sm text-muted-foreground hover:text-foreground transition-colors py-2 border-b border-border/50"
+            className="flex items-center justify-between text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors py-2 px-2 rounded-md -mx-2"
           >
             ERP by Industry
             <ArrowRight className="h-4 w-4" />
           </a>
           <a
             href="/case-studies"
-            className="flex items-center justify-between text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
+            className="flex items-center justify-between text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors py-2 px-2 rounded-md -mx-2"
           >
             Success Stories
             <ArrowRight className="h-4 w-4" />
