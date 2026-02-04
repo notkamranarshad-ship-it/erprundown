@@ -548,6 +548,39 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Newsletter Subscription CTA */}
+      <section className="py-8 md:py-12">
+        <div className="container-page">
+          <div className="rounded-2xl bg-gradient-to-r from-primary to-primary/80 p-6 sm:p-8 md:p-12">
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="text-xl font-bold text-white sm:text-2xl md:text-3xl">
+                Stay Ahead with ERP Insights
+              </h2>
+              <p className="mt-3 text-sm text-white/80 sm:text-base">
+                Get the latest ERP trends, vendor comparisons, and implementation tips delivered to your inbox weekly.
+              </p>
+              <form className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-2">
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  className="h-11 flex-1 rounded-lg border-0 bg-white/10 px-4 text-sm text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 sm:max-w-xs"
+                />
+                <Button 
+                  type="submit" 
+                  variant="secondary" 
+                  className="h-11 whitespace-nowrap"
+                >
+                  Subscribe Now
+                </Button>
+              </form>
+              <p className="mt-3 text-xs text-white/60">
+                Join 5,000+ manufacturing professionals. Unsubscribe anytime.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Advisory Board / Trusted By Section - Matching PDF */}
       <section className="py-8 md:py-12 lg:py-16">
         <div className="container-page">
