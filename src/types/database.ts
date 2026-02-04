@@ -168,3 +168,18 @@ export interface Partner {
   created_at: string;
   updated_at: string;
 }
+
+export interface Author {
+  id: string;
+  name: string;
+  slug: string;
+  title: string | null;
+  bio: string | null;
+  image_url: string | null;
+  email: string | null;
+  linkedin_url: string | null;
+  twitter_url: string | null;
+  is_default: boolean;
+  created_at: string;
+  updated_at: string;
+}

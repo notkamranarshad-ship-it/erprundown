@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      authors: {
+        Row: {
+          bio: string | null
+          created_at: string
+          email: string | null
+          id: string
+          image_url: string | null
+          is_default: boolean | null
+          linkedin_url: string | null
+          name: string
+          slug: string
+          title: string | null
+          twitter_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          image_url?: string | null
+          is_default?: boolean | null
+          linkedin_url?: string | null
+          name: string
+          slug: string
+          title?: string | null
+          twitter_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          image_url?: string | null
+          is_default?: boolean | null
+          linkedin_url?: string | null
+          name?: string
+          slug?: string
+          title?: string | null
+          twitter_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       blog_post_industries: {
         Row: {
           blog_post_id: string
@@ -76,6 +121,7 @@ export type Database = {
       }
       blog_posts: {
         Row: {
+          author_id: string | null
           author_name: string | null
           author_title: string | null
           category: string | null
@@ -94,6 +140,7 @@ export type Database = {
           verified_by_title: string | null
         }
         Insert: {
+          author_id?: string | null
           author_name?: string | null
           author_title?: string | null
           category?: string | null
@@ -112,6 +159,7 @@ export type Database = {
           verified_by_title?: string | null
         }
         Update: {
+          author_id?: string | null
           author_name?: string | null
           author_title?: string | null
           category?: string | null
@@ -129,7 +177,15 @@ export type Database = {
           verified_by_name?: string | null
           verified_by_title?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "blog_posts_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "authors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       case_studies: {
         Row: {
