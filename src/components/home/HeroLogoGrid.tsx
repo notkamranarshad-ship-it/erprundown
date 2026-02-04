@@ -216,19 +216,6 @@ export function HeroLogoGrid() {
   return (
     <TooltipProvider delayDuration={100}>
       <div className="rounded-xl border bg-card shadow-lg overflow-hidden">
-        {/* Header */}
-        <div className="border-b bg-muted/50 px-4 py-3 flex items-center justify-between">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            20 Top ERP Solutions
-          </p>
-          <Link 
-            to="/vendors" 
-            className="flex items-center gap-1 text-xs font-medium text-accent hover:underline"
-          >
-            View all <ArrowRight className="h-3 w-3" />
-          </Link>
-        </div>
-        
         {/* 5x4 Logo Grid - Responsive */}
         <div className="grid grid-cols-4 sm:grid-cols-5 gap-px bg-border">
           {erpVendors.map((vendor, i) => (
@@ -246,7 +233,7 @@ export function HeroLogoGrid() {
                     <img 
                       src={vendor.logo} 
                       alt={vendor.name} 
-                      className="h-6 sm:h-7 md:h-8 w-auto max-w-[50px] sm:max-w-[60px] object-contain opacity-60 grayscale transition-all duration-200 group-hover:opacity-100 group-hover:grayscale-0 group-hover:scale-110"
+                      className="h-6 sm:h-7 md:h-8 w-auto max-w-[50px] sm:max-w-[60px] object-contain transition-all duration-200 group-hover:scale-110"
                       loading="lazy"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
