@@ -3,18 +3,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { Author } from "@/types/database";
 import { toast } from "sonner";
 
+// Type for public author data (excludes email)
+export type PublicAuthor = Omit<Author, "email">;
+
+// Public hooks - use the authors_public view (excludes email)
 export function useAuthors() {
   return useQuery({
     queryKey: ["authors"],
     queryFn: async () => {
+      // Use the public view that excludes email for public read access
       const { data, error } = await supabase
-        .from("authors")
+        .from("authors_public")
         .select("*")
         .order("is_default", { ascending: false })
         .order("name");
 
       if (error) throw error;
-      return data as Author[];
+      return data as PublicAuthor[];
     },
   });
 }
@@ -23,14 +28,15 @@ export function useAuthor(slug: string) {
   return useQuery({
     queryKey: ["author", slug],
     queryFn: async () => {
+      // Use the public view that excludes email for public read access
       const { data, error } = await supabase
-        .from("authors")
+        .from("authors_public")
         .select("*")
         .eq("slug", slug)
         .single();
 
       if (error) throw error;
-      return data as Author;
+      return data as PublicAuthor;
     },
     enabled: !!slug,
   });
@@ -40,14 +46,33 @@ export function useDefaultAuthor() {
   return useQuery({
     queryKey: ["default-author"],
     queryFn: async () => {
+      // Use the public view that excludes email for public read access
       const { data, error } = await supabase
-        .from("authors")
+        .from("authors_public")
         .select("*")
         .eq("is_default", true)
         .single();
 
       if (error) throw error;
-      return data as Author;
+      return data as PublicAuthor;
+    },
+  });
+}
+
+// Admin hooks - use the full authors table (includes email, requires admin role)
+export function useAuthorsAdmin() {
+  return useQuery({
+    queryKey: ["authors-admin"],
+    queryFn: async () => {
+      // Admins can access the full authors table via RLS
+      const { data, error } = await supabase
+        .from("authors")
+        .select("*")
+        .order("is_default", { ascending: false })
+        .order("name");
+
+      if (error) throw error;
+      return data as Author[];
     },
   });
 }
@@ -68,6 +93,7 @@ export function useCreateAuthor() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authors"] });
+      queryClient.invalidateQueries({ queryKey: ["authors-admin"] });
       toast.success("Author created successfully");
     },
     onError: (error: Error) => {
@@ -93,6 +119,7 @@ export function useUpdateAuthor() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authors"] });
+      queryClient.invalidateQueries({ queryKey: ["authors-admin"] });
       toast.success("Author updated successfully");
     },
     onError: (error: Error) => {
@@ -115,6 +142,7 @@ export function useDeleteAuthor() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authors"] });
+      queryClient.invalidateQueries({ queryKey: ["authors-admin"] });
       toast.success("Author deleted successfully");
     },
     onError: (error: Error) => {

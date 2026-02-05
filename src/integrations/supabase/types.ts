@@ -185,6 +185,13 @@ export type Database = {
             referencedRelation: "authors"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "blog_posts_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "authors_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       case_studies: {
@@ -628,7 +635,48 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      authors_public: {
+        Row: {
+          bio: string | null
+          created_at: string | null
+          id: string | null
+          image_url: string | null
+          is_default: boolean | null
+          linkedin_url: string | null
+          name: string | null
+          slug: string | null
+          title: string | null
+          twitter_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string | null
+          id?: string | null
+          image_url?: string | null
+          is_default?: boolean | null
+          linkedin_url?: string | null
+          name?: string | null
+          slug?: string | null
+          title?: string | null
+          twitter_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string | null
+          id?: string | null
+          image_url?: string | null
+          is_default?: boolean | null
+          linkedin_url?: string | null
+          name?: string | null
+          slug?: string | null
+          title?: string | null
+          twitter_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
