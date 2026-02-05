@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Pencil, Trash2, User, Star, ExternalLink } from "lucide-react";
+import { Plus, Pencil, Trash2, User, Star, ExternalLink, FileText, Building2, Factory, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -31,6 +32,10 @@ import {
 import { PageLayout } from "@/components/layout/PageLayout";
 import { useAuthorsAdmin, useCreateAuthor, useUpdateAuthor, useDeleteAuthor } from "@/hooks/useAuthors";
 import { Author } from "@/types/database";
+import { AdminPartnersSection } from "@/components/admin/AdminPartnersSection";
+import { AdminIndustriesSection } from "@/components/admin/AdminIndustriesSection";
+import { AdminBlogSection } from "@/components/admin/AdminBlogSection";
+import { AdminCaseStudiesSection } from "@/components/admin/AdminCaseStudiesSection";
 
 interface AuthorFormData {
   name: string;
@@ -350,56 +355,97 @@ export default function AdminPage() {
           <div>
             <h1 className="text-3xl font-bold text-foreground">Admin Dashboard</h1>
             <p className="text-muted-foreground mt-1">
-              Manage authors and content settings
+              Manage content, authors, partners, and more
             </p>
           </div>
         </div>
 
-        {/* Authors Section */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                <User className="h-5 w-5" />
-                Authors
-              </CardTitle>
-              <p className="text-sm text-muted-foreground mt-1">
-                Manage author profiles for blog posts
-              </p>
-            </div>
-            <Button onClick={() => setCreateOpen(true)}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Author
-            </Button>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="h-32 animate-pulse rounded-lg bg-muted" />
-                ))}
-              </div>
-            ) : authors && authors.length > 0 ? (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {authors.map((author) => (
-                  <AuthorCard key={author.id} author={author} />
-                ))}
-              </div>
-            ) : (
-              <div className="rounded-lg border border-dashed p-12 text-center">
-                <User className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                <p className="text-muted-foreground mb-4">No authors yet</p>
-                <Button onClick={() => setCreateOpen(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Your First Author
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+        <Tabs defaultValue="blog" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="blog" className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              <span className="hidden sm:inline">Blog</span>
+            </TabsTrigger>
+            <TabsTrigger value="case-studies" className="flex items-center gap-2">
+              <BookOpen className="h-4 w-4" />
+              <span className="hidden sm:inline">Case Studies</span>
+            </TabsTrigger>
+            <TabsTrigger value="industries" className="flex items-center gap-2">
+              <Factory className="h-4 w-4" />
+              <span className="hidden sm:inline">Industries</span>
+            </TabsTrigger>
+            <TabsTrigger value="partners" className="flex items-center gap-2">
+              <Building2 className="h-4 w-4" />
+              <span className="hidden sm:inline">Partners</span>
+            </TabsTrigger>
+            <TabsTrigger value="authors" className="flex items-center gap-2">
+              <User className="h-4 w-4" />
+              <span className="hidden sm:inline">Authors</span>
+            </TabsTrigger>
+          </TabsList>
 
-      <AuthorFormDialog open={createOpen} onOpenChange={setCreateOpen} />
+          <TabsContent value="blog">
+            <AdminBlogSection />
+          </TabsContent>
+
+          <TabsContent value="case-studies">
+            <AdminCaseStudiesSection />
+          </TabsContent>
+
+          <TabsContent value="industries">
+            <AdminIndustriesSection />
+          </TabsContent>
+
+          <TabsContent value="partners">
+            <AdminPartnersSection />
+          </TabsContent>
+
+          <TabsContent value="authors">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <User className="h-5 w-5" />
+                    Authors
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Manage author profiles for blog posts
+                  </p>
+                </div>
+                <Button onClick={() => setCreateOpen(true)} size="sm">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Author
+                </Button>
+              </CardHeader>
+              <CardContent>
+                {isLoading ? (
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <div key={i} className="h-32 animate-pulse rounded-lg bg-muted" />
+                    ))}
+                  </div>
+                ) : authors && authors.length > 0 ? (
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {authors.map((author) => (
+                      <AuthorCard key={author.id} author={author} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="rounded-lg border border-dashed p-12 text-center">
+                    <User className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground mb-4">No authors yet</p>
+                    <Button onClick={() => setCreateOpen(true)}>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Your First Author
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+            <AuthorFormDialog open={createOpen} onOpenChange={setCreateOpen} />
+          </TabsContent>
+        </Tabs>
+      </div>
     </PageLayout>
   );
 }
