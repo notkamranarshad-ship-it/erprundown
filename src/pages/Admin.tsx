@@ -29,7 +29,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { PageLayout } from "@/components/layout/PageLayout";
-import { useAuthors, useCreateAuthor, useUpdateAuthor, useDeleteAuthor } from "@/hooks/useAuthors";
+import { useAuthorsAdmin, useCreateAuthor, useUpdateAuthor, useDeleteAuthor } from "@/hooks/useAuthors";
 import { Author } from "@/types/database";
 
 interface AuthorFormData {
@@ -340,7 +340,7 @@ function AuthorCard({ author }: { author: Author }) {
 
 export default function AdminPage() {
   const [createOpen, setCreateOpen] = useState(false);
-  const { data: authors, isLoading } = useAuthors();
+  const { data: authors, isLoading } = useAuthorsAdmin();
 
   return (
     <PageLayout>
