@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Industry, Vendor } from "@/types/database";
+import { toast } from "sonner";
 
 export function useIndustries(options?: {
   featured?: boolean;
@@ -32,6 +33,77 @@ export function useIndustries(options?: {
 
       if (error) throw error;
       return data as Industry[];
+    },
+  });
+}
+
+export function useCreateIndustry() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (industry: Omit<Industry, "id" | "created_at" | "updated_at">) => {
+      const { data, error } = await supabase
+        .from("industries")
+        .insert(industry)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["industries"] });
+      toast.success("Industry created successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to create industry: ${error.message}`);
+    },
+  });
+}
+
+export function useUpdateIndustry() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: Partial<Industry> & { id: string }) => {
+      const { data, error } = await supabase
+        .from("industries")
+        .update(updates)
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["industries"] });
+      toast.success("Industry updated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to update industry: ${error.message}`);
+    },
+  });
+}
+
+export function useDeleteIndustry() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("industries")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["industries"] });
+      toast.success("Industry deleted successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to delete industry: ${error.message}`);
     },
   });
 }

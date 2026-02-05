@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { BlogPost, Vendor, Industry } from "@/types/database";
+import { toast } from "sonner";
 
 export function useBlogPosts(options?: {
   limit?: number;
@@ -31,6 +32,77 @@ export function useBlogPosts(options?: {
 
       if (error) throw error;
       return data as BlogPost[];
+    },
+  });
+}
+
+export function useCreateBlogPost() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (post: Omit<BlogPost, "id" | "created_at" | "updated_at">) => {
+      const { data, error } = await supabase
+        .from("blog_posts")
+        .insert(post)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["blog-posts"] });
+      toast.success("Blog post created successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to create blog post: ${error.message}`);
+    },
+  });
+}
+
+export function useUpdateBlogPost() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: Partial<BlogPost> & { id: string }) => {
+      const { data, error } = await supabase
+        .from("blog_posts")
+        .update(updates)
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["blog-posts"] });
+      toast.success("Blog post updated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to update blog post: ${error.message}`);
+    },
+  });
+}
+
+export function useDeleteBlogPost() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("blog_posts")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["blog-posts"] });
+      toast.success("Blog post deleted successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to delete blog post: ${error.message}`);
     },
   });
 }

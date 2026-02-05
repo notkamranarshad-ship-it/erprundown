@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Partner } from "@/types/database";
+import { toast } from "sonner";
 
 export function usePartners(options?: {
   featured?: boolean;
@@ -57,6 +58,77 @@ export function usePartners(options?: {
       }
 
       return partners;
+    },
+  });
+}
+
+export function useCreatePartner() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (partner: Omit<Partner, "id" | "created_at" | "updated_at">) => {
+      const { data, error } = await supabase
+        .from("partners")
+        .insert(partner)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["partners"] });
+      toast.success("Partner created successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to create partner: ${error.message}`);
+    },
+  });
+}
+
+export function useUpdatePartner() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: Partial<Partner> & { id: string }) => {
+      const { data, error } = await supabase
+        .from("partners")
+        .update(updates)
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["partners"] });
+      toast.success("Partner updated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to update partner: ${error.message}`);
+    },
+  });
+}
+
+export function useDeletePartner() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("partners")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["partners"] });
+      toast.success("Partner deleted successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to delete partner: ${error.message}`);
     },
   });
 }
