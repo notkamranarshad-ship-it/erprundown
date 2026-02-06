@@ -45,9 +45,10 @@ export function useCreateBlogPost() {
         .from("blog_posts")
         .insert(post)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error("No blog post returned (not authorized or insert failed)");
       return data;
     },
     onSuccess: () => {
@@ -70,9 +71,10 @@ export function useUpdateBlogPost() {
         .update(updates)
         .eq("id", id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error("No blog post updated (not authorized or record missing)");
       return data;
     },
     onSuccess: () => {

@@ -54,9 +54,10 @@ export function useCreateCaseStudy() {
         .from("case_studies")
         .insert(caseStudy)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error("No case study returned (not authorized or insert failed)");
       return data;
     },
     onSuccess: () => {
@@ -76,15 +77,16 @@ export function useUpdateCaseStudy() {
     mutationFn: async ({ id, ...updates }: Partial<CaseStudy> & { id: string }) => {
       // Remove relation fields before updating
       const { industry, vendor, ...dbUpdates } = updates as any;
-      
+
       const { data, error } = await supabase
         .from("case_studies")
         .update(dbUpdates)
         .eq("id", id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error("No case study updated (not authorized or record missing)");
       return data;
     },
     onSuccess: () => {
