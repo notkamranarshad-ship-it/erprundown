@@ -71,9 +71,10 @@ export function useCreatePartner() {
         .from("partners")
         .insert(partner)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error("No partner returned (not authorized or insert failed)");
       return data;
     },
     onSuccess: () => {
@@ -96,9 +97,10 @@ export function useUpdatePartner() {
         .update(updates)
         .eq("id", id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error("No partner updated (not authorized or record missing)");
       return data;
     },
     onSuccess: () => {

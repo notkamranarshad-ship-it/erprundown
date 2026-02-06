@@ -33,10 +33,10 @@ export function useAuthor(slug: string) {
         .from("authors_public")
         .select("*")
         .eq("slug", slug)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
-      return data as PublicAuthor;
+      return (data as PublicAuthor) ?? null;
     },
     enabled: !!slug,
   });
@@ -86,9 +86,10 @@ export function useCreateAuthor() {
         .from("authors")
         .insert(author)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error("No author returned (not authorized or insert failed)");
       return data;
     },
     onSuccess: () => {
@@ -112,9 +113,10 @@ export function useUpdateAuthor() {
         .update(updates)
         .eq("id", id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error("No author updated (not authorized or record missing)");
       return data;
     },
     onSuccess: () => {
