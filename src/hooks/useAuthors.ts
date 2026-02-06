@@ -51,10 +51,10 @@ export function useDefaultAuthor() {
         .from("authors_public")
         .select("*")
         .eq("is_default", true)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
-      return data as PublicAuthor;
+      return data as PublicAuthor | null;
     },
   });
 }
