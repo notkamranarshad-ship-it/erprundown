@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Vendor, Industry, Feature } from "@/types/database";
+import { toast } from "sonner";
 
 export function useVendors(options?: {
   featured?: boolean;
@@ -159,5 +160,83 @@ export function useVendorsBySlug(slugs: string[]) {
         .filter(Boolean) as Vendor[];
     },
     enabled: slugs.length > 0,
+  });
+}
+
+// ─── CRUD Mutations ───────────────────────────────────────────────
+
+export function useCreateVendor() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (vendor: Omit<Vendor, "id" | "created_at" | "updated_at" | "industries" | "features">) => {
+      const { data, error } = await supabase
+        .from("vendors")
+        .insert(vendor)
+        .select()
+        .maybeSingle();
+
+      if (error) throw error;
+      if (!data) throw new Error("No vendor returned (not authorized or insert failed)");
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["vendors"] });
+      toast.success("Vendor created successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to create vendor: ${error.message}`);
+    },
+  });
+}
+
+export function useUpdateVendor() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: Partial<Vendor> & { id: string }) => {
+      // Strip relation fields before sending to DB
+      const { industries, features, ...dbUpdates } = updates as any;
+
+      const { data, error } = await supabase
+        .from("vendors")
+        .update(dbUpdates)
+        .eq("id", id)
+        .select()
+        .maybeSingle();
+
+      if (error) throw error;
+      if (!data) throw new Error("No vendor updated (not authorized or record missing)");
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["vendors"] });
+      toast.success("Vendor updated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to update vendor: ${error.message}`);
+    },
+  });
+}
+
+export function useDeleteVendor() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("vendors")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["vendors"] });
+      toast.success("Vendor deleted successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to delete vendor: ${error.message}`);
+    },
   });
 }
