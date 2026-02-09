@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Pencil, Trash2, User, Star, ExternalLink, FileText, Building2, Factory, BookOpen } from "lucide-react";
+import { Plus, Pencil, Trash2, User, Star, ExternalLink, FileText, Building2, Factory, BookOpen, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,6 +36,7 @@ import { AdminPartnersSection } from "@/components/admin/AdminPartnersSection";
 import { AdminIndustriesSection } from "@/components/admin/AdminIndustriesSection";
 import { AdminBlogSection } from "@/components/admin/AdminBlogSection";
 import { AdminCaseStudiesSection } from "@/components/admin/AdminCaseStudiesSection";
+import { AdminVendorsSection } from "@/components/admin/AdminVendorsSection";
 
 interface AuthorFormData {
   name: string;
@@ -361,10 +362,14 @@ export default function AdminPage() {
         </div>
 
         <Tabs defaultValue="blog" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="blog" className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
               <span className="hidden sm:inline">Blog</span>
+            </TabsTrigger>
+            <TabsTrigger value="vendors" className="flex items-center gap-2">
+              <Package className="h-4 w-4" />
+              <span className="hidden sm:inline">Vendors</span>
             </TabsTrigger>
             <TabsTrigger value="case-studies" className="flex items-center gap-2">
               <BookOpen className="h-4 w-4" />
@@ -386,6 +391,10 @@ export default function AdminPage() {
 
           <TabsContent value="blog">
             <AdminBlogSection />
+          </TabsContent>
+
+          <TabsContent value="vendors">
+            <AdminVendorsSection />
           </TabsContent>
 
           <TabsContent value="case-studies">
