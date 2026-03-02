@@ -37,6 +37,8 @@ import { AdminIndustriesSection } from "@/components/admin/AdminIndustriesSectio
 import { AdminBlogSection } from "@/components/admin/AdminBlogSection";
 import { AdminCaseStudiesSection } from "@/components/admin/AdminCaseStudiesSection";
 import { AdminVendorsSection } from "@/components/admin/AdminVendorsSection";
+import { AdminLogin } from "@/components/admin/AdminLogin";
+import { useAuth } from "@/hooks/useAuth";
 
 interface AuthorFormData {
   name: string;
