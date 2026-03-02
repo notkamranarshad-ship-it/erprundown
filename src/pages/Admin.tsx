@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Pencil, Trash2, User, Star, ExternalLink, FileText, Building2, Factory, BookOpen, Package } from "lucide-react";
+import { Plus, Pencil, Trash2, User, Star, ExternalLink, FileText, Building2, Factory, BookOpen, Package, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -37,6 +37,8 @@ import { AdminIndustriesSection } from "@/components/admin/AdminIndustriesSectio
 import { AdminBlogSection } from "@/components/admin/AdminBlogSection";
 import { AdminCaseStudiesSection } from "@/components/admin/AdminCaseStudiesSection";
 import { AdminVendorsSection } from "@/components/admin/AdminVendorsSection";
+import { AdminLogin } from "@/components/admin/AdminLogin";
+import { useAuth } from "@/hooks/useAuth";
 
 interface AuthorFormData {
   name: string;
@@ -347,6 +349,19 @@ function AuthorCard({ author }: { author: Author }) {
 export default function AdminPage() {
   const [createOpen, setCreateOpen] = useState(false);
   const { data: authors, isLoading } = useAuthorsAdmin();
+  const { user, loading, signIn, signOut } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AdminLogin onLogin={signIn} />;
+  }
 
   return (
     <PageLayout>
@@ -356,9 +371,13 @@ export default function AdminPage() {
           <div>
             <h1 className="text-3xl font-bold text-foreground">Admin Dashboard</h1>
             <p className="text-muted-foreground mt-1">
-              Manage content, authors, partners, and more
+              Signed in as {user.email}
             </p>
           </div>
+          <Button variant="outline" onClick={signOut}>
+            <LogOut className="h-4 w-4 mr-2" />
+            Sign Out
+          </Button>
         </div>
 
         <Tabs defaultValue="blog" className="space-y-6">
