@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Pencil, Trash2, User, Star, ExternalLink, FileText, Building2, Factory, BookOpen, Package } from "lucide-react";
+import { Plus, Pencil, Trash2, User, Star, ExternalLink, FileText, Building2, Factory, BookOpen, Package, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
