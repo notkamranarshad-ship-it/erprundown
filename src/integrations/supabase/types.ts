@@ -275,8 +275,38 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_vendors: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hero_vendors_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: true
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       industries: {
         Row: {
+          core_problems: string[] | null
           created_at: string
           featured: boolean | null
           id: string
@@ -288,6 +318,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          core_problems?: string[] | null
           created_at?: string
           featured?: boolean | null
           id?: string
@@ -299,6 +330,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          core_problems?: string[] | null
           created_at?: string
           featured?: boolean | null
           id?: string
