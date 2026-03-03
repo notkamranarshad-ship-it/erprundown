@@ -7,10 +7,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { useVendors } from "@/hooks/useVendors";
+import { useHeroVendors } from "@/hooks/useHeroVendors";
 
 export function HeroLogoGrid() {
-  const { data: vendors, isLoading } = useVendors({ featured: true, limit: 20 });
+  const { data: vendors, isLoading } = useHeroVendors();
 
   if (isLoading || !vendors?.length) {
     return (
@@ -28,7 +28,7 @@ export function HeroLogoGrid() {
     <TooltipProvider delayDuration={100}>
       <div className="rounded-xl border bg-card shadow-lg overflow-hidden">
         <div className="grid grid-cols-4 sm:grid-cols-5 gap-px bg-border">
-          {vendors.map((vendor, i) => (
+          {vendors.map((vendor) => (
             <Tooltip key={vendor.id}>
               <TooltipTrigger asChild>
                 <Link
@@ -72,9 +72,7 @@ export function HeroLogoGrid() {
               >
                 <div className="rounded-lg border bg-background p-4">
                   <div className="mb-2 flex items-start justify-between">
-                    <div>
-                      <h4 className="font-semibold text-foreground text-sm">{vendor.name}</h4>
-                    </div>
+                    <h4 className="font-semibold text-foreground text-sm">{vendor.name}</h4>
                     <ExternalLink className="h-3.5 w-3.5 text-accent shrink-0" />
                   </div>
                   
@@ -87,13 +85,13 @@ export function HeroLogoGrid() {
                       <DollarSign className="h-3.5 w-3.5 text-accent shrink-0" />
                       <span className="font-medium">{vendor.pricing_stance || "Quote-based"}</span>
                     </div>
-                    {vendor.company_size_fit?.length > 0 && (
+                    {vendor.company_size_fit && vendor.company_size_fit.length > 0 && (
                       <div className="flex items-center gap-2 text-foreground">
                         <Building className="h-3.5 w-3.5 text-accent shrink-0" />
                         <span>{vendor.company_size_fit.join(' • ')}</span>
                       </div>
                     )}
-                    {vendor.deployment?.length > 0 && (
+                    {vendor.deployment && vendor.deployment.length > 0 && (
                       <div className="flex items-center gap-2 text-foreground">
                         <Cloud className="h-3.5 w-3.5 text-accent shrink-0" />
                         <span>{vendor.deployment.join(' • ')}</span>
