@@ -1,6 +1,6 @@
 import { CheckCircle, Linkedin, Twitter } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuthorsPublic } from "@/hooks/useAuthors";
+import { useAuthors } from "@/hooks/useAuthors";
 
 interface AuthorBioFullProps {
   authorName: string;
@@ -17,7 +17,7 @@ export function AuthorBioFull({
   verifiedByName,
   verifiedByTitle,
 }: AuthorBioFullProps) {
-  const { data: authors } = useAuthorsPublic();
+  const { data: authors } = useAuthors();
   const author = authors?.find((a) => a.name === authorName);
 
   const getInitials = (name: string) => {
