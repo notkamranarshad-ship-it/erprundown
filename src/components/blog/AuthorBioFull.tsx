@@ -1,5 +1,6 @@
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Linkedin, Twitter } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAuthors } from "@/hooks/useAuthors";
 
 interface AuthorBioFullProps {
   authorName: string;
@@ -16,6 +17,9 @@ export function AuthorBioFull({
   verifiedByName,
   verifiedByTitle,
 }: AuthorBioFullProps) {
+  const { data: authors } = useAuthors();
+  const author = authors?.find((a) => a.name === authorName);
+
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -46,6 +50,38 @@ export function AuthorBioFull({
               <p className="font-semibold text-foreground text-lg">{authorName}</p>
               {authorTitle && (
                 <p className="text-sm text-muted-foreground mt-0.5">{authorTitle}</p>
+              )}
+              {author?.bio && (
+                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                  {author.bio}
+                </p>
+              )}
+              {/* Social Links */}
+              {(author?.linkedin_url || author?.twitter_url) && (
+                <div className="flex items-center gap-2 mt-3">
+                  {author?.linkedin_url && (
+                    <a
+                      href={author.linkedin_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-border hover:bg-muted transition-colors"
+                      aria-label="LinkedIn"
+                    >
+                      <Linkedin className="h-4 w-4 text-muted-foreground" />
+                    </a>
+                  )}
+                  {author?.twitter_url && (
+                    <a
+                      href={author.twitter_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-border hover:bg-muted transition-colors"
+                      aria-label="X (Twitter)"
+                    >
+                      <Twitter className="h-4 w-4 text-muted-foreground" />
+                    </a>
+                  )}
+                </div>
               )}
             </div>
           </div>

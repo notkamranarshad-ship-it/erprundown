@@ -47,6 +47,7 @@ export interface Industry {
   summary: string | null;
   overview: string | null;
   key_requirements: string | null;
+  core_problems: string[] | null;
   featured: boolean;
   created_at: string;
   updated_at: string;

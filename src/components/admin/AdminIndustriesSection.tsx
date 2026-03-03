@@ -35,6 +35,7 @@
    summary: string;
    overview: string;
    key_requirements: string;
+   core_problems: string;
    featured: boolean;
  }
  
@@ -44,6 +45,7 @@
    summary: "",
    overview: "",
    key_requirements: "",
+   core_problems: "",
    featured: false,
  };
  
@@ -71,6 +73,7 @@
            summary: industry.summary || "",
            overview: industry.overview || "",
            key_requirements: industry.key_requirements || "",
+           core_problems: ((industry as any).core_problems || []).join(", "),
            featured: industry.featured,
          }
        : initialFormData
@@ -82,12 +85,18 @@
    const handleSubmit = async (e: React.FormEvent) => {
      e.preventDefault();
  
+     const coreProblemsArr = formData.core_problems
+       .split(",")
+       .map((s) => s.trim())
+       .filter(Boolean);
+
      const payload = {
        name: formData.name,
        slug: formData.slug || generateSlug(formData.name),
        summary: formData.summary || null,
        overview: formData.overview || null,
        key_requirements: formData.key_requirements || null,
+       core_problems: coreProblemsArr,
        featured: formData.featured,
      };
  
@@ -165,6 +174,17 @@
                onChange={(e) => setFormData({ ...formData, key_requirements: e.target.value })}
                rows={3}
                placeholder="Key ERP requirements for this industry"
+             />
+           </div>
+
+           <div className="space-y-2">
+             <Label htmlFor="core_problems">Core Problems (comma-separated)</Label>
+             <Textarea
+               id="core_problems"
+               value={formData.core_problems}
+               onChange={(e) => setFormData({ ...formData, core_problems: e.target.value })}
+               rows={3}
+               placeholder="Supply chain complexity, Regulatory compliance, Legacy system integration"
              />
            </div>
  
