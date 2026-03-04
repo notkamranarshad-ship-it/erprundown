@@ -20,18 +20,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
-// Featured vendor logos with real URLs
-
-// Featured vendor logos with real URLs
-const featuredLogos = [
-  { name: "Oracle NetSuite", logo: "https://upload.wikimedia.org/wikipedia/commons/3/36/Logo.min.svg" },
-  { name: "SAP", logo: "https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg" },
-  { name: "Microsoft", logo: "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" },
-  { name: "Infor", logo: "https://cdn.worldvectorlogo.com/logos/infor.svg" },
-  { name: "Sage", logo: "https://upload.wikimedia.org/wikipedia/commons/2/29/Sage_logo.svg" },
-  { name: "Acumatica", logo: "https://www.acumatica.com/wp-content/uploads/2021/09/acumatica-logo.svg" },
-];
-
 // Testimonials matching PDF
 const testimonials = [
   {
