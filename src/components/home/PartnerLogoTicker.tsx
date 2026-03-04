@@ -1,13 +1,23 @@
 import { usePublications } from "@/hooks/usePublications";
 
+function getLogoUrl(pub: { logo_url: string | null; website_url: string | null }) {
+  if (pub.logo_url) return pub.logo_url;
+  if (pub.website_url) {
+    try {
+      const domain = new URL(pub.website_url).hostname;
+      return `https://logo.clearbit.com/${domain}`;
+    } catch { return null; }
+  }
+  return null;
+}
+
 export function PartnerLogoTicker() {
   const { data: pubs } = usePublications();
 
-  const logos = pubs?.filter((p) => p.logo_url) ?? [];
+  const logos = pubs?.filter((p) => getLogoUrl(p)) ?? [];
 
   if (logos.length === 0) return null;
 
-  // Duplicate for seamless loop
   const tickerItems = [...logos, ...logos];
 
   return (
@@ -28,7 +38,7 @@ export function PartnerLogoTicker() {
               className="flex shrink-0 items-center justify-center grayscale opacity-60 transition-all hover:grayscale-0 hover:opacity-100"
             >
               <img
-                src={pub.logo_url!}
+                src={getLogoUrl(pub)!}
                 alt={pub.name}
                 className="h-7 w-auto max-w-[100px] object-contain sm:h-9 sm:max-w-[120px]"
                 onError={(e) => {
