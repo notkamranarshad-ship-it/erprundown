@@ -8,6 +8,7 @@ import { CompareFloatingBar } from "@/components/compare/CompareFloatingBar";
 import { VendorSearchAutocomplete } from "@/components/home/VendorSearchAutocomplete";
 import { HeroLogoGrid } from "@/components/home/HeroLogoGrid";
 import { HeroComparePreview } from "@/components/home/HeroComparePreview";
+import { PartnerLogoTicker } from "@/components/home/PartnerLogoTicker";
 import { useVendors } from "@/hooks/useVendors";
 import { useIndustries } from "@/hooks/useIndustries";
 import { useState, useEffect } from "react";
@@ -18,18 +19,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-
-// Featured vendor logos with real URLs
-
-// Featured vendor logos with real URLs
-const featuredLogos = [
-  { name: "Oracle NetSuite", logo: "https://upload.wikimedia.org/wikipedia/commons/3/36/Logo.min.svg" },
-  { name: "SAP", logo: "https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg" },
-  { name: "Microsoft", logo: "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" },
-  { name: "Infor", logo: "https://cdn.worldvectorlogo.com/logos/infor.svg" },
-  { name: "Sage", logo: "https://upload.wikimedia.org/wikipedia/commons/2/29/Sage_logo.svg" },
-  { name: "Acumatica", logo: "https://www.acumatica.com/wp-content/uploads/2021/09/acumatica-logo.svg" },
-];
 
 // Testimonials matching PDF
 const testimonials = [
@@ -187,28 +176,8 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Featured In / Logo Bar - Matching PDF */}
-      <section className="border-y bg-muted/30 py-6 md:py-8">
-        <div className="container-page">
-          <p className="mb-4 text-center text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            Featured ERP Partners
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:gap-12">
-            {featuredLogos.map((item, i) => (
-              <div key={i} className="flex items-center justify-center grayscale opacity-60 transition-all hover:grayscale-0 hover:opacity-100">
-                <img 
-                  src={item.logo} 
-                  alt={item.name} 
-                  className="h-6 w-auto max-w-[80px] object-contain sm:h-8 sm:max-w-[100px]"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Featured ERP Partners - Ticker */}
+      <PartnerLogoTicker />
 
       {/* Compare ERP Systems Filter Bar - Functional with animations */}
       <section className="py-8 md:py-12">
