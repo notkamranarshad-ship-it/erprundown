@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Pencil, Trash2, User, Star, ExternalLink, FileText, Building2, Factory, BookOpen, Package, LogOut, LayoutGrid } from "lucide-react";
+import { Plus, Pencil, Trash2, User, Star, ExternalLink, FileText, Building2, Factory, BookOpen, Package, LogOut, LayoutGrid, Newspaper } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,6 +38,7 @@ import { AdminBlogSection } from "@/components/admin/AdminBlogSection";
 import { AdminCaseStudiesSection } from "@/components/admin/AdminCaseStudiesSection";
 import { AdminVendorsSection } from "@/components/admin/AdminVendorsSection";
 import { AdminHeroSection } from "@/components/admin/AdminHeroSection";
+import { AdminPublicationsSection } from "@/components/admin/AdminPublicationsSection";
 import { AdminLogin } from "@/components/admin/AdminLogin";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -382,7 +383,7 @@ export default function AdminPage() {
         </div>
 
         <Tabs defaultValue="blog" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-7">
+          <TabsList className="grid w-full grid-cols-8">
             <TabsTrigger value="blog" className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
               <span className="hidden sm:inline">Blog</span>
@@ -410,6 +411,10 @@ export default function AdminPage() {
             <TabsTrigger value="hero" className="flex items-center gap-2">
               <LayoutGrid className="h-4 w-4" />
               <span className="hidden sm:inline">Hero</span>
+            </TabsTrigger>
+            <TabsTrigger value="publications" className="flex items-center gap-2">
+              <Newspaper className="h-4 w-4" />
+              <span className="hidden sm:inline">Featured In</span>
             </TabsTrigger>
           </TabsList>
 
@@ -480,6 +485,10 @@ export default function AdminPage() {
 
           <TabsContent value="hero">
             <AdminHeroSection />
+          </TabsContent>
+
+          <TabsContent value="publications">
+            <AdminPublicationsSection />
           </TabsContent>
         </Tabs>
       </div>
