@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      advisors: {
+        Row: {
+          company: string | null
+          created_at: string
+          display_order: number
+          id: string
+          image_url: string | null
+          linkedin_url: string | null
+          long_bio: string | null
+          name: string
+          role: string | null
+          short_bio: string | null
+          slug: string
+          twitter_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url?: string | null
+          linkedin_url?: string | null
+          long_bio?: string | null
+          name: string
+          role?: string | null
+          short_bio?: string | null
+          slug: string
+          twitter_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url?: string | null
+          linkedin_url?: string | null
+          long_bio?: string | null
+          name?: string
+          role?: string | null
+          short_bio?: string | null
+          slug?: string
+          twitter_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       authors: {
         Row: {
           bio: string | null
