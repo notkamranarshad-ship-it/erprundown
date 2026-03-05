@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Pencil, Trash2, User, Star, ExternalLink, FileText, Building2, Factory, BookOpen, Package, LogOut, LayoutGrid, Newspaper } from "lucide-react";
+import { Plus, Pencil, Trash2, User, Users, Star, ExternalLink, FileText, Building2, Factory, BookOpen, Package, LogOut, LayoutGrid, Newspaper } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -39,6 +39,7 @@ import { AdminCaseStudiesSection } from "@/components/admin/AdminCaseStudiesSect
 import { AdminVendorsSection } from "@/components/admin/AdminVendorsSection";
 import { AdminHeroSection } from "@/components/admin/AdminHeroSection";
 import { AdminPublicationsSection } from "@/components/admin/AdminPublicationsSection";
+import { AdminAdvisorsSection } from "@/components/admin/AdminAdvisorsSection";
 import { AdminLogin } from "@/components/admin/AdminLogin";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -383,7 +384,7 @@ export default function AdminPage() {
         </div>
 
         <Tabs defaultValue="blog" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-8">
+          <TabsList className="grid w-full grid-cols-9">
             <TabsTrigger value="blog" className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
               <span className="hidden sm:inline">Blog</span>
@@ -415,6 +416,10 @@ export default function AdminPage() {
             <TabsTrigger value="publications" className="flex items-center gap-2">
               <Newspaper className="h-4 w-4" />
               <span className="hidden sm:inline">Featured In</span>
+            </TabsTrigger>
+            <TabsTrigger value="advisors" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              <span className="hidden sm:inline">Advisors</span>
             </TabsTrigger>
           </TabsList>
 
@@ -489,6 +494,10 @@ export default function AdminPage() {
 
           <TabsContent value="publications">
             <AdminPublicationsSection />
+          </TabsContent>
+
+          <TabsContent value="advisors">
+            <AdminAdvisorsSection />
           </TabsContent>
         </Tabs>
       </div>
