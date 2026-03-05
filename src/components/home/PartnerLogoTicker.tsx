@@ -1,10 +1,15 @@
 import { usePublications } from "@/hooks/usePublications";
 
+function isImageUrl(url: string) {
+  return /\.(png|jpg|jpeg|svg|webp|gif)(\?.*)?$/i.test(url);
+}
+
 function getLogoUrl(pub: { logo_url: string | null; website_url: string | null }) {
-  if (pub.logo_url) return pub.logo_url;
-  if (pub.website_url) {
+  if (pub.logo_url && isImageUrl(pub.logo_url)) return pub.logo_url;
+  const url = pub.website_url || pub.logo_url;
+  if (url) {
     try {
-      const domain = new URL(pub.website_url).hostname;
+      const domain = new URL(url).hostname;
       return `https://logo.clearbit.com/${domain}`;
     } catch { return null; }
   }
