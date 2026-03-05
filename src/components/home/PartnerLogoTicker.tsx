@@ -5,11 +5,15 @@ function isImageUrl(url: string) {
 }
 
 function getLogoUrl(pub: { logo_url: string | null; website_url: string | null }) {
-  if (pub.logo_url && isImageUrl(pub.logo_url)) return pub.logo_url;
+  // If logo_url is a direct image or clearbit URL, use it
+  if (pub.logo_url && (isImageUrl(pub.logo_url) || pub.logo_url.includes('logo.clearbit.com'))) {
+    return pub.logo_url;
+  }
+  // Fallback: derive from website_url or logo_url
   const url = pub.website_url || pub.logo_url;
   if (url) {
     try {
-      const domain = new URL(url).hostname;
+      const domain = new URL(url).hostname.replace(/^www\./, '');
       return `https://logo.clearbit.com/${domain}`;
     } catch { return null; }
   }
