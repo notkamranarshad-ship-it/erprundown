@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { FaviconImg } from "@/components/ui/favicon-img";
 import { cn } from "@/lib/utils";
 import type { Vendor } from "@/types/database";
 
@@ -104,17 +105,7 @@ export function CompareVendorGrid({
 
                 {/* Logo */}
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
-                  {vendor.logo_url ? (
-                    <img
-                      src={vendor.logo_url}
-                      alt={vendor.name}
-                      className="h-9 w-9 object-contain"
-                    />
-                  ) : (
-                    <span className="text-lg font-bold text-muted-foreground">
-                      {vendor.name.charAt(0)}
-                    </span>
-                  )}
+                  <FaviconImg logoUrl={vendor.logo_url} websiteUrl={vendor.website_url} name={vendor.name} className="h-9 w-9" />
                 </div>
 
                 {/* Name */}

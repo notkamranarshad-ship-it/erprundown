@@ -6,6 +6,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { FaviconImg } from "@/components/ui/favicon-img";
 import { cn } from "@/lib/utils";
 import { useHeroVendors } from "@/hooks/useHeroVendors";
 
@@ -39,28 +40,12 @@ export function HeroLogoGrid() {
                     "aspect-square p-2 sm:p-3"
                   )}
                 >
-                  {vendor.logo_url ? (
-                    <img 
-                      src={vendor.logo_url} 
-                      alt={vendor.name} 
-                      className="h-6 sm:h-7 md:h-8 w-auto max-w-[50px] sm:max-w-[60px] object-contain transition-all duration-200 group-hover:scale-110"
-                      loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                        const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                        if (fallback) fallback.style.display = 'flex';
-                      }}
-                    />
-                  ) : null}
-                  <span 
-                    className={cn(
-                      "text-center text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-muted-foreground transition-colors group-hover:text-accent",
-                      vendor.logo_url ? "hidden" : "flex"
-                    )}
-                    style={{ display: vendor.logo_url ? 'none' : 'flex' }}
-                  >
-                    {vendor.name}
-                  </span>
+                  <FaviconImg
+                    logoUrl={vendor.logo_url}
+                    websiteUrl={vendor.website_url}
+                    name={vendor.name}
+                    className="h-6 sm:h-7 md:h-8 w-auto max-w-[50px] sm:max-w-[60px] object-contain transition-all duration-200 group-hover:scale-110"
+                  />
                   
                   <div className="absolute inset-0 border-2 border-transparent group-hover:border-accent/30 transition-colors rounded-sm pointer-events-none" />
                 </Link>

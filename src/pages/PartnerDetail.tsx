@@ -3,6 +3,7 @@ import {
   ArrowLeft, ExternalLink, MapPin, Calendar, Users, 
   Globe, Award, Building, Briefcase, CheckCircle 
 } from "lucide-react";
+import { FaviconImg } from "@/components/ui/favicon-img";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -85,17 +86,7 @@ export default function PartnerDetailPage() {
             <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
               <div className="flex items-start gap-4">
                 <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-muted">
-                  {partner.logo_url ? (
-                    <img
-                      src={partner.logo_url}
-                      alt={`${partner.name} logo`}
-                      className="h-14 w-14 object-contain"
-                    />
-                  ) : (
-                    <span className="text-3xl font-bold text-muted-foreground">
-                      {partner.name.charAt(0)}
-                    </span>
-                  )}
+                  <FaviconImg logoUrl={partner.logo_url} websiteUrl={partner.website_url} name={partner.name} className="h-14 w-14" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
