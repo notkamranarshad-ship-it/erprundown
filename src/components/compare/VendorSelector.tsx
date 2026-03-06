@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { FaviconImg } from "@/components/ui/favicon-img";
 import { useVendors } from "@/hooks/useVendors";
 import type { Vendor } from "@/types/database";
 
@@ -51,17 +52,7 @@ export function VendorSelector({
               >
                 <div className="flex items-center gap-2">
                   <div className="flex h-8 w-8 items-center justify-center rounded bg-background">
-                    {vendor.logo_url ? (
-                      <img
-                        src={vendor.logo_url}
-                        alt={vendor.name}
-                        className="h-6 w-6 object-contain"
-                      />
-                    ) : (
-                      <span className="text-xs font-bold text-muted-foreground">
-                        {vendor.name.charAt(0)}
-                      </span>
-                    )}
+                    <FaviconImg logoUrl={vendor.logo_url} websiteUrl={vendor.website_url} name={vendor.name} className="h-6 w-6" />
                   </div>
                   <span className="text-sm font-medium">{vendor.name}</span>
                 </div>
@@ -101,17 +92,7 @@ export function VendorSelector({
                   className="flex w-full items-center gap-2 rounded-md p-2 text-left text-sm hover:bg-muted transition-colors"
                 >
                   <div className="flex h-7 w-7 items-center justify-center rounded bg-muted">
-                    {vendor.logo_url ? (
-                      <img
-                        src={vendor.logo_url}
-                        alt={vendor.name}
-                        className="h-5 w-5 object-contain"
-                      />
-                    ) : (
-                      <span className="text-xs font-bold text-muted-foreground">
-                        {vendor.name.charAt(0)}
-                      </span>
-                    )}
+                    <FaviconImg logoUrl={vendor.logo_url} websiteUrl={vendor.website_url} name={vendor.name} className="h-5 w-5" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium truncate">{vendor.name}</p>

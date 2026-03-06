@@ -3,6 +3,7 @@ import { MapPin, Calendar, Users, ExternalLink, Award } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { FaviconImg } from "@/components/ui/favicon-img";
 import type { Partner } from "@/types/database";
 
 interface PartnerCardProps {
@@ -20,17 +21,7 @@ export function PartnerCard({ partner }: PartnerCardProps) {
         {/* Header */}
         <div className="mb-4 flex items-start justify-between gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted shrink-0">
-            {partner.logo_url ? (
-              <img
-                src={partner.logo_url}
-                alt={`${partner.name} logo`}
-                className="h-10 w-10 object-contain"
-              />
-            ) : (
-              <span className="text-lg font-bold text-muted-foreground">
-                {partner.name.charAt(0)}
-              </span>
-            )}
+            <FaviconImg logoUrl={partner.logo_url} websiteUrl={partner.website_url} name={partner.name} className="h-10 w-10" />
           </div>
           {partner.featured && (
             <Badge className="bg-amber-100 text-amber-800 border-amber-200 shrink-0">

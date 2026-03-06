@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, ExternalLink, Calendar, Plus, Check, Star, Trophy, Users, Building2, Sparkles } from "lucide-react";
+import { FaviconImg } from "@/components/ui/favicon-img";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -89,17 +90,7 @@ export default function VendorDetailPage() {
             <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
               <div className="flex items-start gap-4">
                 <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-muted">
-                  {vendor.logo_url ? (
-                    <img
-                      src={vendor.logo_url}
-                      alt={`${vendor.name} logo`}
-                      className="h-12 w-12 object-contain"
-                    />
-                  ) : (
-                    <span className="text-2xl font-bold text-muted-foreground">
-                      {vendor.name.charAt(0)}
-                    </span>
-                  )}
+                  <FaviconImg logoUrl={vendor.logo_url} websiteUrl={vendor.website_url} name={vendor.name} className="h-12 w-12" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { FaviconImg } from "@/components/ui/favicon-img";
 import type { Vendor } from "@/types/database";
 
 interface CompareTableProps {
@@ -184,17 +185,7 @@ export function CompareTable({ vendors, onRemove }: CompareTableProps) {
               
               <div className="flex flex-col items-center text-center">
                 <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-lg bg-muted">
-                  {vendor.logo_url ? (
-                    <img
-                      src={vendor.logo_url}
-                      alt={vendor.name}
-                      className="h-10 w-10 object-contain"
-                    />
-                  ) : (
-                    <span className="text-xl font-bold text-muted-foreground">
-                      {vendor.name.charAt(0)}
-                    </span>
-                  )}
+                  <FaviconImg logoUrl={vendor.logo_url} websiteUrl={vendor.website_url} name={vendor.name} className="h-10 w-10" />
                 </div>
                 <h3 className="font-semibold">{vendor.name}</h3>
                 {vendor.sponsored && (

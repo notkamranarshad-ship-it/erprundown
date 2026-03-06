@@ -3,6 +3,7 @@ import { Plus, Check, ExternalLink } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { FaviconImg } from "@/components/ui/favicon-img";
 import { useCompare } from "@/hooks/useCompare";
 import type { Vendor } from "@/types/database";
 
@@ -21,17 +22,7 @@ export function VendorCard({ vendor, showCompare = true }: VendorCardProps) {
         {/* Header with logo and sponsored badge */}
         <div className="mb-4 flex items-start justify-between">
           <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
-            {vendor.logo_url ? (
-              <img
-                src={vendor.logo_url}
-                alt={`${vendor.name} logo`}
-                className="h-10 w-10 object-contain"
-              />
-            ) : (
-              <span className="text-lg font-bold text-muted-foreground">
-                {vendor.name.charAt(0)}
-              </span>
-            )}
+            <FaviconImg logoUrl={vendor.logo_url} websiteUrl={vendor.website_url} name={vendor.name} className="h-10 w-10" />
           </div>
           {vendor.sponsored && (
             <Badge variant="outline" className="text-xs">

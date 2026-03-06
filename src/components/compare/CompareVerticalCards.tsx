@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { FaviconImg } from "@/components/ui/favicon-img";
 import type { Vendor } from "@/types/database";
 
 interface CompareVerticalCardsProps {
@@ -39,17 +40,7 @@ export function CompareVerticalCards({ vendors, onRemove }: CompareVerticalCards
             {/* Logo & Name */}
             <div className="flex items-center gap-3">
               <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-muted shrink-0">
-                {vendor.logo_url ? (
-                  <img
-                    src={vendor.logo_url}
-                    alt={vendor.name}
-                    className="h-10 w-10 object-contain"
-                  />
-                ) : (
-                  <span className="text-xl font-bold text-muted-foreground">
-                    {vendor.name.charAt(0)}
-                  </span>
-                )}
+                <FaviconImg logoUrl={vendor.logo_url} websiteUrl={vendor.website_url} name={vendor.name} className="h-10 w-10" />
               </div>
               <div>
                 <h3 className="font-bold text-lg">{vendor.name}</h3>
