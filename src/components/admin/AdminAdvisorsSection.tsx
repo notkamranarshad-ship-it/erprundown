@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
@@ -170,10 +171,12 @@ export function AdminAdvisorsSection() {
                 <Input value={form.company} onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))} placeholder="TechVentures Inc." />
               </div>
             </div>
-            <div className="space-y-2">
-              <Label>Profile Image URL</Label>
-              <Input value={form.image_url} onChange={(e) => setForm((f) => ({ ...f, image_url: e.target.value }))} placeholder="https://..." />
-            </div>
+            <ImageUploadField
+              label="Profile Image URL"
+              value={form.image_url}
+              onChange={(value) => setForm((f) => ({ ...f, image_url: value }))}
+              uploadFolder="advisors"
+            />
             <div className="space-y-2">
               <Label>Short Bio (for card)</Label>
               <Textarea value={form.short_bio} onChange={(e) => setForm((f) => ({ ...f, short_bio: e.target.value }))} rows={2} placeholder="Brief description..." />
