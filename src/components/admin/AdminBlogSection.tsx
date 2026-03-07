@@ -1,35 +1,36 @@
- import { useState } from "react";
- import { Plus, Pencil, Trash2, FileText, Calendar } from "lucide-react";
- import { Button } from "@/components/ui/button";
- import { Input } from "@/components/ui/input";
- import { Textarea } from "@/components/ui/textarea";
- import { Label } from "@/components/ui/label";
- import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
- import { Badge } from "@/components/ui/badge";
- import {
-   Dialog,
-   DialogContent,
-   DialogDescription,
-   DialogHeader,
-   DialogTitle,
-   DialogFooter,
- } from "@/components/ui/dialog";
- import {
-   AlertDialog,
-   AlertDialogAction,
-   AlertDialogCancel,
-   AlertDialogContent,
-   AlertDialogDescription,
-   AlertDialogFooter,
-   AlertDialogHeader,
-   AlertDialogTitle,
-   AlertDialogTrigger,
- } from "@/components/ui/alert-dialog";
- import { useBlogPosts, useCreateBlogPost, useUpdateBlogPost, useDeleteBlogPost } from "@/hooks/useBlogPosts";
- import { useAuthors, PublicAuthor } from "@/hooks/useAuthors";
- import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
- import type { BlogPost } from "@/types/database";
- import { format } from "date-fns";
+import { useState } from "react";
+import { Plus, Pencil, Trash2, FileText, Calendar } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useBlogPosts, useCreateBlogPost, useUpdateBlogPost, useDeleteBlogPost } from "@/hooks/useBlogPosts";
+import { useAuthors, PublicAuthor } from "@/hooks/useAuthors";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { BlogPost } from "@/types/database";
+import { format } from "date-fns";
  
  interface BlogFormData {
    title: string;
@@ -225,14 +226,12 @@
              />
            </div>
  
-           <div className="space-y-2">
-             <Label htmlFor="featured_image">Featured Image URL</Label>
-             <Input
-               id="featured_image"
-               value={formData.featured_image}
-               onChange={(e) => setFormData({ ...formData, featured_image: e.target.value })}
-             />
-           </div>
+            <ImageUploadField
+              label="Featured Image URL"
+              value={formData.featured_image}
+              onChange={(value) => setFormData({ ...formData, featured_image: value })}
+              uploadFolder="blog"
+            />
  
            <div className="border-t pt-4">
              <h4 className="font-medium mb-3">Author Information</h4>

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Building2 } from "lucide-react";
-import { resolveLogoUrl } from "@/lib/favicon";
+import { getLogoCandidates } from "@/lib/favicon";
 import { cn } from "@/lib/utils";
 
 interface FaviconImgProps {
@@ -11,20 +11,19 @@ interface FaviconImgProps {
   size?: number;
 }
 
-/**
- * Renders a company logo/favicon with automatic fallback:
- * 1. Custom logo_url if provided
- * 2. Google Favicon from website_url domain
- * 3. Placeholder icon with initial letter
- */
 export function FaviconImg({ logoUrl, websiteUrl, name, className = "h-10 w-10", size = 64 }: FaviconImgProps) {
-  const [failed, setFailed] = useState(false);
-  const src = resolveLogoUrl(logoUrl, websiteUrl, size);
+  const [failedIndex, setFailedIndex] = useState(0);
+  const candidates = useMemo(() => getLogoCandidates(logoUrl, websiteUrl, size), [logoUrl, websiteUrl, size]);
+  const src = candidates[failedIndex];
 
-  if (!src || failed) {
+  useEffect(() => {
+    setFailedIndex(0);
+  }, [logoUrl, websiteUrl, size]);
+
+  if (!src) {
     return (
-      <span className={cn("flex items-center justify-center text-lg font-bold text-muted-foreground", className)}>
-        {name.charAt(0)}
+      <span className={cn("flex items-center justify-center rounded bg-muted text-muted-foreground", className)}>
+        <Building2 className="h-4 w-4" />
       </span>
     );
   }
@@ -35,7 +34,9 @@ export function FaviconImg({ logoUrl, websiteUrl, name, className = "h-10 w-10",
       alt={`${name} logo`}
       className={cn("object-contain", className)}
       loading="lazy"
-      onError={() => setFailed(true)}
+      onError={() => setFailedIndex((idx) => idx + 1)}
     />
   );
 }
+
+

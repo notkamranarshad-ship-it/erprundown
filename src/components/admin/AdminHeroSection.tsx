@@ -3,6 +3,7 @@ import { Save, LayoutGrid, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { FaviconImg } from "@/components/ui/favicon-img";
 import { cn } from "@/lib/utils";
 import { useVendors } from "@/hooks/useVendors";
 import { useHeroVendors, useSetHeroVendors } from "@/hooks/useHeroVendors";
@@ -85,17 +86,12 @@ export function AdminHeroSection() {
                       <Check className="h-3 w-3 text-primary-foreground" />
                     </div>
                   )}
-                  {vendor.logo_url ? (
-                    <img
-                      src={vendor.logo_url}
-                      alt={vendor.name}
-                      className="h-8 w-auto max-w-[60px] object-contain"
-                    />
-                  ) : (
-                    <div className="h-8 w-8 rounded bg-muted flex items-center justify-center text-xs font-bold text-muted-foreground">
-                      {vendor.name.charAt(0)}
-                    </div>
-                  )}
+                  <FaviconImg
+                    logoUrl={vendor.logo_url}
+                    websiteUrl={vendor.website_url}
+                    name={vendor.name}
+                    className="h-8 w-8"
+                  />
                   <span className="text-xs font-medium text-foreground text-center truncate w-full">
                     {vendor.name}
                   </span>

@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FaviconImg } from "@/components/ui/favicon-img";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
@@ -69,11 +71,9 @@ export function AdminPublicationsSection() {
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {pubs.map((p) => (
               <div key={p.id} className="flex items-center gap-3 rounded-lg border p-3">
-                {p.logo_url ? (
-                  <img src={p.logo_url} alt={p.name} className="h-8 w-auto max-w-[80px] object-contain" />
-                ) : (
-                  <div className="h-8 w-16 rounded bg-muted flex items-center justify-center text-xs text-muted-foreground">No logo</div>
-                )}
+                <div className="flex h-8 w-8 items-center justify-center rounded bg-muted">
+                  <FaviconImg logoUrl={p.logo_url} websiteUrl={p.website_url} name={p.name} className="h-6 w-6" />
+                </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{p.name}</p>
                   <p className="text-xs text-muted-foreground">Order: {p.display_order}</p>
@@ -116,10 +116,13 @@ export function AdminPublicationsSection() {
               <Label>Name *</Label>
               <Input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} required placeholder="Forbes" />
             </div>
-            <div className="space-y-2">
-              <Label>Logo URL</Label>
-              <Input value={form.logo_url} onChange={(e) => setForm((f) => ({ ...f, logo_url: e.target.value }))} placeholder="https://..." />
-            </div>
+            <ImageUploadField
+              label="Logo URL"
+              value={form.logo_url}
+              onChange={(value) => setForm((f) => ({ ...f, logo_url: value }))}
+              uploadFolder="publications"
+              placeholder="https://..."
+            />
             <div className="space-y-2">
               <Label>Website URL</Label>
               <Input value={form.website_url} onChange={(e) => setForm((f) => ({ ...f, website_url: e.target.value }))} placeholder="https://..." />
