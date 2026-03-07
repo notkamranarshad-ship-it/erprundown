@@ -1,30 +1,29 @@
 /**
- * Generate a Google Favicon URL from a website URL or logo_url.
- * Falls back to null if no valid domain can be extracted.
+ * Normalizes URL input and extracts hostname for favicon generation.
  */
-export function getFaviconUrl(websiteUrl: string | null | undefined, size: number = 64): string | null {
-  if (!websiteUrl) return null;
+function extractDomain(url: string): string | null {
+  if (!url) return null;
   try {
-    const domain = new URL(websiteUrl).hostname.replace(/^www\./, "");
-    return `https://www.google.com/s2/favicons?domain=${domain}&sz=${size}`;
+    const normalized = /^https?:\/\//i.test(url) ? url : `https://${url}`;
+    return new URL(normalized).hostname.replace(/^www\./, "");
   } catch {
     return null;
   }
 }
 
-/**
- * Resolves the best logo source for a vendor/partner:
- * 1. If logo_url is set and is a direct image, use it
- * 2. Otherwise, generate a Google favicon from website_url
- * 3. Falls back to null
- */
-export function resolveLogoUrl(
+export function getFaviconUrl(url: string | null | undefined, size: number = 64): string | null {
+  if (!url) return null;
+  const domain = extractDomain(url);
+  if (!domain) return null;
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=${size}`;
+}
+
+export function getLogoCandidates(
   logoUrl: string | null | undefined,
   websiteUrl: string | null | undefined,
   size: number = 64
-): string | null {
-  // If a custom logo_url is stored, use it directly (admin can override)
-  if (logoUrl) return logoUrl;
-  // Auto-generate from website domain
-  return getFaviconUrl(websiteUrl, size);
+): string[] {
+  const candidates = [logoUrl, getFaviconUrl(websiteUrl || logoUrl, size)].filter(Boolean) as string[];
+  return Array.from(new Set(candidates));
 }
+

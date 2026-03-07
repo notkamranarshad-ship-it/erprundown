@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, X, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { FaviconImg } from "@/components/ui/favicon-img";
 import { useVendors } from "@/hooks/useVendors";
 import { cn } from "@/lib/utils";
 
@@ -103,7 +104,6 @@ export function VendorSearchAutocomplete() {
         )}
       </div>
 
-      {/* Dropdown */}
       {isOpen && query.length > 0 && (
         <div
           ref={dropdownRef}
@@ -127,17 +127,12 @@ export function VendorSearchAutocomplete() {
                     )}
                   >
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-muted">
-                      {vendor.logo_url ? (
-                        <img
-                          src={vendor.logo_url}
-                          alt={vendor.name}
-                          className="h-5 w-5 object-contain"
-                        />
-                      ) : (
-                        <span className="text-xs font-bold">
-                          {vendor.name.charAt(0)}
-                        </span>
-                      )}
+                      <FaviconImg
+                        logoUrl={vendor.logo_url}
+                        websiteUrl={vendor.website_url}
+                        name={vendor.name}
+                        className="h-5 w-5"
+                      />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-medium text-foreground">
@@ -188,3 +183,4 @@ export function VendorSearchAutocomplete() {
     </div>
   );
 }
+
