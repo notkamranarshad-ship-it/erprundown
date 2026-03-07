@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Building2 } from "lucide-react";
 import { getLogoCandidates } from "@/lib/favicon";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,10 @@ export function FaviconImg({ logoUrl, websiteUrl, name, className = "h-10 w-10",
   const [failedIndex, setFailedIndex] = useState(0);
   const candidates = useMemo(() => getLogoCandidates(logoUrl, websiteUrl, size), [logoUrl, websiteUrl, size]);
   const src = candidates[failedIndex];
+
+  useEffect(() => {
+    setFailedIndex(0);
+  }, [logoUrl, websiteUrl, size]);
 
   if (!src) {
     return (
@@ -34,4 +38,5 @@ export function FaviconImg({ logoUrl, websiteUrl, name, className = "h-10 w-10",
     />
   );
 }
+
 
