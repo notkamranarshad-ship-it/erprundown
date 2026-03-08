@@ -10,7 +10,7 @@ export default function AdvisoryBoard() {
   return (
     <PageLayout>
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-primary/5 to-background py-16 md:py-24">
+      <section className="bg-gradient-to-b from-primary/5 to-background py-16 md:py-24 shadow-none">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
@@ -27,35 +27,35 @@ export default function AdvisoryBoard() {
       {/* Advisors Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          {isLoading ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="h-48 rounded-lg" />
-              ))}
-            </div>
-          ) : advisors && advisors.length > 0 ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {advisors.map((advisor) => (
-                <AdvisorCard
-                  key={advisor.id}
-                  advisor={{
-                    id: advisor.id,
-                    slug: advisor.slug,
-                    name: advisor.name,
-                    role: advisor.role || "",
-                    company: advisor.company || "",
-                    shortBio: advisor.short_bio || "",
-                    longBio: advisor.long_bio || "",
-                    imageUrl: advisor.image_url || "/placeholder.svg",
-                    linkedinUrl: advisor.linkedin_url || undefined,
-                    twitterUrl: advisor.twitter_url || undefined,
-                  }}
-                />
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-muted-foreground">No advisors yet.</p>
-          )}
+          {isLoading ?
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {Array.from({ length: 6 }).map((_, i) =>
+            <Skeleton key={i} className="h-48 rounded-lg" />
+            )}
+            </div> :
+          advisors && advisors.length > 0 ?
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {advisors.map((advisor) =>
+            <AdvisorCard
+              key={advisor.id}
+              advisor={{
+                id: advisor.id,
+                slug: advisor.slug,
+                name: advisor.name,
+                role: advisor.role || "",
+                company: advisor.company || "",
+                shortBio: advisor.short_bio || "",
+                longBio: advisor.long_bio || "",
+                imageUrl: advisor.image_url || "/placeholder.svg",
+                linkedinUrl: advisor.linkedin_url || undefined,
+                twitterUrl: advisor.twitter_url || undefined
+              }} />
+
+            )}
+            </div> :
+
+          <p className="text-center text-muted-foreground">No advisors yet.</p>
+          }
         </div>
       </section>
 
@@ -73,6 +73,6 @@ export default function AdvisoryBoard() {
           <AdvisorContributions limit={6} />
         </div>
       </section>
-    </PageLayout>
-  );
+    </PageLayout>);
+
 }
